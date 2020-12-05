@@ -15,6 +15,9 @@ th {
 	display:inline-block;
 	min-width:105px;
 }
+.icono-ventana {
+	color:red;
+}
 </style>
 <div style="text-align: center; clear: both;">
 	<h2 class="titulo">&Oacute;rdenes de servicio</h2> 
