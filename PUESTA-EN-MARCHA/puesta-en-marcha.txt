@@ -1,0 +1,8 @@
+Subir copia con base de datos de actual sistema del local
+	Quizas implique hacer migracion o adaptar dicha BD
+
+Periodo de prueba del sistema en internet sin que impriman tickets
+
+Crear modulo de impresion para que funcione desde internet
+
+Crear modulo de password que se peuda guradad la sesion en el navegador

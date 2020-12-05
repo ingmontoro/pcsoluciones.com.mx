@@ -1,0 +1,4 @@
+[05-Dec-2020 11:52:59 America/Mexico_City] PHP Notice:  SQLSTATE[HY000] [1045] Access denied for user 'root'@'localhost' (using password: NO) in /home1/pcsoluc1/sistema.pcsoluciones.com.mx/phrapi/framework/libs/DB.php on line 49
+[05-Dec-2020 11:52:59 America/Mexico_City] PHP Fatal error:  Call to a member function query() on null in /home1/pcsoluc1/sistema.pcsoluciones.com.mx/phrapi/framework/libs/DB.php on line 52
+[05-Dec-2020 11:53:01 America/Mexico_City] PHP Notice:  SQLSTATE[HY000] [1045] Access denied for user 'root'@'localhost' (using password: NO) in /home1/pcsoluc1/sistema.pcsoluciones.com.mx/phrapi/framework/libs/DB.php on line 49
+[05-Dec-2020 11:53:01 America/Mexico_City] PHP Fatal error:  Call to a member function query() on null in /home1/pcsoluc1/sistema.pcsoluciones.com.mx/phrapi/framework/libs/DB.php on line 52

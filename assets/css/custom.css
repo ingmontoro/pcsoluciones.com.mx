@@ -1,0 +1,81 @@
+body {
+  padding-bottom: 250px;
+  padding-top: 85px;
+}
+
+/*.navbar-default {
+	background: #2994ff;
+}
+
+.navbar-default .navbar-nav>.active>a, .navbar-default .navbar-nav>.active>a:focus, .navbar-default .navbar-nav>.active>a:hover {
+	background-color: #fff;
+	color: #000;
+}
+
+.navbar-default .navbar-nav>li>a:focus, .navbar-default .navbar-nav>li>a:hover {
+	background-color: #fff;
+}
+
+.navbar-default .navbar-nav>.open>a, .navbar-default .navbar-nav>.open>a:focus, .navbar-default .navbar-nav>.open>a:hover {
+	background-color: #fff;
+	color: #2994ff;
+} 
+
+.navbar-default .navbar-nav>li>a {
+	color: #fff;
+}
+
+.navbar-default .navbar-nav>li>a {
+	background-color: #fff;
+}
+
+.navbar-default .navbar-nav>li>a {
+	color: #000;
+	border-radius: 5px;
+	font-size: 1.5em;
+}
+
+#menu .nav>li {
+	margin: 5px;
+	color: #000;
+}
+*/
+/*.dropdown:hover .dropdown-menu {
+    display: block;
+    margin-top: 0; // remove the gap so it doesn't close
+ }*/
+ 
+.jumbotron {
+    padding-top: 5px;
+}
+ 
+ img.logout {
+	
+	padding: 0 3px;
+	cursor: pointer;
+	vertical-align: middle;
+	padding: 5px;
+	background-color: white;
+	border: 1px solid #fff;
+	border-radius: 7px;
+	width: 50px; 
+}
+
+.popover {
+	max-width: 100%;
+}
+
+.div-100-center {
+	width: 100%;
+	text-align: center;
+}
+
+.check-orden {
+	width: 20px;
+    height: 20px;
+    vertical-align: bottom;
+}
+
+.form-check-label {
+	cursor: pointer;
+}

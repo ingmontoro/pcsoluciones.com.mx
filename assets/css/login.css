@@ -1,0 +1,239 @@
+@CHARSET "ISO-8859-1";
+body {
+	margin: 0 auto;
+	font-family: arial;
+	background-color: black;
+}
+div.div-bloqueo {
+	display: inline-table;
+	width: 100%;
+	height: 100%;
+	z-index: auto;
+	background-color: gray;
+	
+	left: 0px;
+	top: 0px;
+	overflow: auto;
+	background: url('') repeat;
+	background-position: top;
+	background-size: cover;
+}
+#divBloqueo, #divBloqueoF {
+	
+}
+div.users-container {
+	width: 100%;
+	height: 100%;
+	border: 0px solid red;
+	text-align: center;
+	/*padding: 20px 0;*/
+	padding: 0;
+	padding-bottom: 0;
+	margin: 0 auto;
+	vertical-align: middle;
+	display: table-cell;
+}
+div.div-title, div.div-footer {
+	font-size: 5em;
+	color: white;
+	font-family: fantasy;
+	display: table-row;
+	font-style: italic;
+	text-shadow: 5px 5px 5px black;
+}
+div.div-title {
+	/*position: absolute;*/
+	text-align: left;
+	margin-bottom: 3%;
+	/*top: 3%;
+	left: 3%;*/
+	
+}
+div.div-footer {
+	/*position: absolute;*/
+	text-align: right;
+	/*bottom: 3%;
+	right: 3%;*/
+	padding-right: 20px;
+    margin-top: 3%;
+}
+div.userDiv {
+	border: 1px solid black;
+	width: 250px;
+	height: 250px;
+	background-color: yellow;
+	margin-left: 50px;
+	position: relative;
+	float: left;
+	cursor: pointer;
+}
+
+div.divUserName {
+	border: 0x solid red;
+	position: absolute;
+	bottom: 0px;
+	width: 100%;
+	text-align: center;
+}
+
+#divUserIntro, #divUserIntroN {
+	border: 0x solid red;
+	position: absolute;
+	top: 40%;
+	width: 100%;
+	height: 30%;
+	right: 0px;
+	font-size: 7.5em;
+	font-weight: bold;
+	font-family: verdana;
+	color: black;
+	text-align: right;
+	vertical-align: middle;
+	display: none;
+}
+
+.wp {
+	border: 1px solid transparent;
+	opacity: 1;
+	filter: alpha(opacity = 50);
+	cursor: pointer;
+}
+
+.wp:hover {
+	border: 1px solid white;
+	opacity: 1;
+	filter: alpha(opacity = 100);
+}
+
+.profile {
+	background-image: url('../images/profilesn.jpg');
+	/*background-size: 925px;*/
+}
+
+.profile1 {
+	background-position-x: left;
+	background-position-y: top;
+	
+}
+.profile2 {
+	background-position-x: center;
+	background-position-y: top;
+}
+.profile3 {
+	background-position-x: right;
+	background-position-y: top;
+}
+.profile4 {
+	background-position-x: left;
+	background-position-y: center;
+}
+.profile5 {
+	background-position-x: center;
+	background-position-y: center;
+}
+.profile6 {
+	background-position-x: right;
+	background-position-y: center;
+}
+.profile7 {
+	background-position-x: left;
+	background-position-y: bottom;
+}
+.profile8 {
+	background-position-x: center;
+	background-position-y: bottom;
+}
+.profile9 {
+	background-position-x: right;
+	background-position-y: bottom;
+}
+div.cell-user /* CELDA DE USUARIO DE LOGINSCREEN */ {
+	width: 300px;
+	height: 300px;
+	margin: 20px;
+	border: 0px solid black;
+	display: inline-block;
+	margin-bottom: 0px;
+	cursor: pointer;
+	/*opacity: 0.5; filter: alpha(opacity=50); */
+	position: relative;
+	background-size: 300px;
+	background-position: center;
+	background-repeat: no-repeat;
+	border-radius: 25px;
+}
+
+div.cell-user-img /* PRUEBA */ {
+	width: 300px;
+	height: 300px;
+	/*border: 3px solid white;*/
+	display: inline-block;
+	margin-bottom: 0px;
+	cursor: pointer;
+	opacity: 0.8;
+	filter: alpha(opacity = 80);
+	position: relative;
+	/*background-size: 300px;
+	background-position: center;
+	background-repeat: no-repeat;*/
+	/*border-radius: 150px;*/
+	overflow: hidden;
+}
+
+div.cell-user-img:hover {
+	opacity: 1.0;
+	filter: alpha(opacity = 100); /* For IE8 and earlier */
+}
+
+
+
+div.div-username-label /* ETIQUETA CON NOMBRE DE USUARIO DE LOGINSCREEN*/ {
+	text-align: center;
+	/*padding: 0px 10px;*/
+	position: absolute;
+	bottom: 0px;
+	left: 0px;
+	font-size: 2.5em;
+	background-color: white;
+	border: 0px solid #000;
+	/*margin-left: -15px;*/
+	/*border-radius: 5px;*/
+	width: 100%;
+	font-family:monospace;
+	word-spacing: -15px;
+}
+
+div.div-user-config {
+	text-align: right;
+	padding: 0px;
+	position: absolute;
+	top: 0px;
+	right: 0px;
+	background-color: white;
+	/*background: url('../images/config-icon.png') no-repeat center;*/
+	/*background: url('../images/gears.png') no-repeat center;*/
+	width: 50px;
+	height: 50px;
+	background-size: 50px;
+	border: 0px solid red;
+	opacity: 0.4;
+	border-radius:50%;
+	filter: alpha(opacity = 40);
+}
+
+div.div-user-config:hover {
+	opacity: 1.0;
+	filter: alpha(opacity = 100);
+}
+
+.alertDiv {
+	font-size: 2em;
+	margin: 0 auto;
+	border: 1px solid red;
+	background-color: white;
+	color: black;
+	width: 50%;
+	padding: 50px;
+	top: 40%;
+	position: relative;
+}
