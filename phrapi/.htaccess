@@ -1,0 +1,9 @@
+<IfModule mod_rewrite.c>
+	### Mod Rewrite Start
+	Options +FollowSymLinks
+	RewriteEngine On
+	RewriteBase /phrapi/
+	#RewriteBase /sistema.pcsoluciones.com.mx/phrapi/
+
+	RewriteRule ^([-a-z0-9]+/?)+$ index.php?resource=$0 [L,QSA,NC]
+</IfModule>
