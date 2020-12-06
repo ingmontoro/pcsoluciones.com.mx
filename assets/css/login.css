@@ -187,7 +187,7 @@ div.cell-user-img:hover {
 
 
 
-div.div-username-label /* ETIQUETA CON NOMBRE DE USUARIO DE LOGINSCREEN*/ {
+div.div-password-label, div.div-username-label /* ETIQUETA CON NOMBRE DE USUARIO DE LOGINSCREEN*/ {
 	text-align: center;
 	/*padding: 0px 10px;*/
 	position: absolute;

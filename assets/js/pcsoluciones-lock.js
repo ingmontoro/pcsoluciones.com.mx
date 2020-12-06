@@ -53,9 +53,19 @@ function login() {
 	}
 }
 
-function startSession(userName) {
+function hideAllPass() {
+	$(".div-password-label").hide();
+	$(".div-username-label").show();
+}
+
+function startSession(userName, userId) {
 	$("#usuario").val(userName);
-	$("#do-login").submit();
+	hideAllPass();
+	//$("div#" + userId).parent().find(".div-username-label").toggle();
+	$("div#" + userId).parent().find(".div-password-label").toggle();
+	$("div#" + userId).parent().find(".div-password-label").find("input.input-pass").focus();
+	//alert($("div#" + userId).parent().find(".div-username-label").is(""));
+	//$("#do-login").submit();
 	//login();
 	//logged = true;
 	//unlockScreen();

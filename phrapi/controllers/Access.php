@@ -42,7 +42,7 @@ class Access {
 		
 		$user = getValueFrom($_POST, 'usuario', '', FILTER_SANITIZE_STRING);
 		$pass = getValueFrom($_POST, 'contrasena', '', FILTER_SANITIZE_STRING);
-		$pass = "no-se-usa";
+		//$pass = "no-se-usa";
 		if (empty($user) OR empty($pass)) {
 			return 401;
 		}
@@ -50,9 +50,9 @@ class Access {
 		$id = (int)$this->db->queryOne("
 			SELECT id
 			FROM usuario 
-			WHERE login = :login and activo = 1",
+			WHERE login = :login and activo = 1 AND password = SHA2(:pass, 512)",
 		array(
-			':login' => $user
+			':login' => $user, ':pass' => $pass
 		));
 		
 		if (!$id) {

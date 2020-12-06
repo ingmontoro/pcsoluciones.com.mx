@@ -40,6 +40,14 @@
 		.db-name {
 			color: #ffb82a;
 		}
+		input[type="password"] {
+			margin: 6px;
+			height: 25px;
+			text-align: center;
+		}
+		div.div-password-label {
+			display:block;
+		}
 		</style>
 		<title><?php echo $GLOBALS['config']['system_name']; ?></title>
 	</head>
@@ -77,9 +85,15 @@
 						<div class="cell-user-img <?=$class?>"
 							style="<?=$style?>"
 							id="<?=$_user->id?>"
-							onclick="startSession('<?=$_user->login?>', '<?=$_user->alias?>');">
+							onclick="startSession('<?=$_user->login?>', '<?=$_user->id?>');">
 						</div>
-						<div class="div-username-label" id="label<?=$_user->id?>"><?=$_user->alias?></div>
+						<div class="div-username-label" id="label<?=$_user->id?>"><?=$_user->alias?>
+						</div>
+						<div class="div-password-label">
+							<span style="font-size:large">password:</span>
+							<br/>
+							<input class="input-pass" type="password" />
+						</div>
 						<!-- <div class="div-user-config"><img src="assets/images/gears.png" style="width:48px;"></div>  -->
 					</div>
 				<?endforeach;?>
@@ -145,6 +159,25 @@
 <script src="assets/js/login-footer.js"></script>
 <script type="text/javascript">
 $(document).ready( function() {
+	//ocultamos los password
+	$(".div-password-label").hide();
+	$(".div-password-label").keypress(function(e) {
+		var contra;
+		var code = (e.keyCode ? e.keyCode : e.which);
+		if(code==13){
+			//alert(e.target.value);
+			contra = e.target.value;
+			if(contra.trim() != "") {
+				$("#contrasena").val(contra);
+				$("#do-login").submit();
+			}
+		}
+	});
+	$(document).on('keyup', function(evt) {
+		if (evt.keyCode == 27) {
+		   hideAllPass();
+		}
+	});
 	$("form#do-login").submit(function(e) {
         e.preventDefault();
     	var formData = new FormData($(this)[0]);
