@@ -29,6 +29,10 @@ img.logo {
 	background-color: #0d8bca7d;
 	color: #eb693c;
 }
+/*fix para que no cambie el color en clientes*/
+.mi-menu>li>a {
+	color: #eb693c !important;
+}
 </style>
 <nav id="menu" class="navbar navbar-default navbar-fixed-top">
 	<div class="container">
@@ -50,7 +54,7 @@ img.logo {
 					<a href="ordenes" class="dropdown-toggle"data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
 						&Oacute;rdenes <span class="caret"></span>
 					</a>
-					<ul class="dropdown-menu">
+					<ul class="dropdown-menu mi-menu">
 						<li><a class="click-loader" href="ordenes/add">Nueva</a></li>
 						<li><a class="click-loader" href="buscar/ordenes">Buscar</a></li>
 						<li><a class="click-loader" href="ordenes">Listado</a></li>
@@ -62,7 +66,7 @@ img.logo {
 				<li class="active_ dropdown"><a href="#" class="dropdown-toggle"
 					data-toggle="dropdown" role="button" aria-haspopup="true"
 					aria-expanded="false">Notas <span class="caret"></a>
-					<ul class="dropdown-menu">
+					<ul class="dropdown-menu mi-menu">
 						<li><a class="click-loader" href="notas/add">Nueva</a></li>
 						<li><a class="click-loader" href="buscar/notas">Buscar</a></li>
 						<li><a class="click-loader" href="notas">Listado</a></li>
@@ -74,7 +78,7 @@ img.logo {
 				<li class="active_ dropdown"><a href="#" class="dropdown-toggle"
 					data-toggle="dropdown" role="button" aria-haspopup="true"
 					aria-expanded="false">Ventas <span class="caret"></a>
-					<ul class="dropdown-menu">
+					<ul class="dropdown-menu mi-menu">
 						<li><a class="click-loader" href="periodo">Por per&iacute;odo</a></li>
 						<li><a class="click-loader" href="dia">Por d&iacute;a</a></li>
 						<li role="separator" class="divider"></li>
@@ -85,7 +89,7 @@ img.logo {
 				<li class="active_ dropdown"><a href="#" class="dropdown-toggle"
 					data-toggle="dropdown" role="button" aria-haspopup="true"
 					aria-expanded="false">Facturaci&oacute;n <span class="caret"></a>
-					<ul class="dropdown-menu">
+					<ul class="dropdown-menu mi-menu">
 						<li><a class="click-loader" href="clientes/add">Alta de cliente</a></li>
 						<li><a class="click-loader" href="buscar/clientes">Buscar cliente</a></li>
 						<li role="separator" class="divider"></li>
@@ -96,7 +100,7 @@ img.logo {
 				<li class="active_ dropdown"><a href="#" class="dropdown-toggle"
 					data-toggle="dropdown" role="button" aria-haspopup="true"
 					aria-expanded="false">Inventario <span class="caret"></a>
-					<ul class="dropdown-menu">
+					<ul class="dropdown-menu mi-menu">
 						<li><a class="click-loader" href="articulos/add">Alta de art&iacute;culo</a></li>
 						<li><a class="click-loader" href="buscar/articulos">Buscar art&iacute;culo</a></li>
 						<li><a class="click-loader" href="articulos">Listado de art&iacute;culos</a></li>
