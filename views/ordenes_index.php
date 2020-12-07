@@ -15,9 +15,11 @@ th {
 	display:inline-block;
 	min-width:105px;
 }
-.icono-ventana {
-	color:red;
+
+.table>tbody>tr>td, .table>tbody>tr>th, .table>tfoot>tr>td, .table>tfoot>tr>th, .table>thead>tr>td, .table>thead>tr>th {
+	vertical-align: middle;
 }
+
 </style>
 <div style="text-align: center; clear: both;">
 	<h2 class="titulo">&Oacute;rdenes de servicio</h2> 
@@ -86,8 +88,11 @@ th {
 				</td>
 				<td class="celda-id text-center">
 					<!-- a href="index.php?accion=edicion&amp;id=<?=$orden->numero?>" class="btn btn-default"><?=fixFolSize($orden->numero)?></a -->
-					<a href="ordenes/<?=$orden->numero?>" class="btn btn-default no-shadow"><?=fixFolSize($orden->numero)?></a>
-					<a href="ordenes/<?=$orden->numero?>" title="abrir en ventana" class="ventana"><i class="icono-ventana glyphicon glyphicon-new-window"></i></a>
+					<a href="ordenes/<?=$orden->numero?>" class="btn btn-underline btn-default no-shadow"><?=fixFolSize($orden->numero)?></a>
+					<a href="ordenes/<?=$orden->numero?>" title="abrir en ventana" class="ventana">
+						<br>
+						<span style="font-size:small;">ventana <i class="glyphicon glyphicon-new-window"></i></span>
+					</a>
 				</td>
 				<td class="text-capitalize">
 					<?=$orden->nombre_fiscal == '' ? $orden->nombreC : $orden->nombre_fiscal . "<br />(" . $orden->nombreC . ")"; ?>
@@ -100,7 +105,7 @@ th {
 				<td class="text-center" style="vertical-align: middle">
 					<? if($orden->notas > 0):?>
 					<button data-id="<?=$orden->numero?>" data-placement="bottom" type="button" class="btn btn-default btn-sm btn-historico" data-toggle="popover" data-content="" data-original-title="Comentarios orden de servicio #<?=$orden->numero?>">
-			          <span class="glyphicon glyphicon-pencil"></span> ver notas... 
+			          ver notas &nbsp;<span class="glyphicon glyphicon-pencil"></span>
 			        </button>
 			        <? endif; ?>
 				</td>

@@ -79,3 +79,12 @@ body {
 .form-check-label {
 	cursor: pointer;
 }
+
+.btn-underline {
+	text-decoration: underline;
+	font-weight:bold;
+}
+.caret { color: #ef3e36;}
+/*.icono-ventana {
+	color:#1c98c9;
+}*/

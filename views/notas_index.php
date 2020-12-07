@@ -13,6 +13,9 @@ th {
 	display:inline-block;
 	min-width:105px;
 }
+.table>tbody>tr>td, .table>tbody>tr>th, .table>tfoot>tr>td, .table>tfoot>tr>th, .table>thead>tr>td, .table>thead>tr>th {
+	vertical-align: middle;
+}
 </style>
 <div style="text-align: center; clear: both;">
 	<h2 class="titulo">Notas de venta</h2> 
@@ -60,8 +63,11 @@ th {
 					<? $index ++ ?>
 				</td>
 				<td class="celda-id text-center">
-					<a href="notas/<?=$orden->numero?>" class="btn btn-default no-shadow"><?=fixFolSize($orden->numero)?></a>
-					<a href="notas/<?=$orden->numero?>" title="abrir en ventana" class="ventana"><i class="icono-ventana glyphicon glyphicon-new-window"></i></a>
+					<a href="notas/<?=$orden->numero?>" class="btn btn-underline btn-default no-shadow"><?=fixFolSize($orden->numero)?></a>
+					<a href="notas/<?=$orden->numero?>" title="abrir en ventana" class="ventana">
+						<br>
+						<span style="font-size:small;">ventana <i class="glyphicon glyphicon-new-window"></i></span>
+					</a>
 				</td>
 				<td class="celda-id">
 					<?$n = trim(fixFolSize($orden->folio));?>
