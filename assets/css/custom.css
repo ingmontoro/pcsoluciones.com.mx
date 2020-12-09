@@ -84,6 +84,15 @@ body {
 	text-decoration: underline;
 	font-weight:bold;
 }
+/*AUto fit columnas*/
+.table td.fit, 
+.table th.fit {
+    white-space: nowrap;
+    width: 1%;
+}
+.table-middle>tbody>tr>td, .table-middle>tbody>tr>th, .table-middle>tfoot>tr>td, .table-middle>tfoot>tr>th, .table-middle>thead>tr>td, .table-middle>thead>tr>th {
+	vertical-align: middle;
+}
 .caret { color: #ef3e36;}
 /*.icono-ventana {
 	color:#1c98c9;

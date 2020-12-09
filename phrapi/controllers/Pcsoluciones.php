@@ -328,7 +328,7 @@ class Pcsoluciones {
 						$valoresDetalle[":claveArticulo"] = $valores[0];
 						$valoresDetalle[":cantidad"] = $valores[1];
 						$valoresDetalle[":descripcion"] = '';
-						$valoresDetalle[":precio"] 	= '';
+						$valoresDetalle[":precio"] 	= 0;
 					}
 					$this->db->query(
 						"INSERT INTO detalle_nota set folio = :folio, claveArticulo = :claveArticulo, descripcion = :descripcion, precio = :precio, cantidad = :cantidad",

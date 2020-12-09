@@ -15,20 +15,20 @@ th {
 	display:inline-block;
 	min-width:105px;
 }
-
+/*
 .table>tbody>tr>td, .table>tbody>tr>th, .table>tfoot>tr>td, .table>tfoot>tr>th, .table>thead>tr>td, .table>thead>tr>th {
 	vertical-align: middle;
 }
-
+*/
 </style>
 <div style="text-align: center; clear: both;">
 	<h2 class="titulo">&Oacute;rdenes de servicio</h2> 
 </div>
 <div id="divTablaOrdenes">
 	<div class="table-responsive">
-		<table id="tabla-ordenes" class="table table-striped table-hover table-clickable">
+		<table id="tabla-ordenes" class="table table-striped table-hover table-clickable table-middle">
 			<tr style="background-color: ">
-				<th class="item-num">#</th>
+				<th class="item-num fit">#</th>
 				<th class="text-center">Orden#</th>
 				<th>Nombre del Cliente</th>
 				<th>Descripci&oacute;n</th>

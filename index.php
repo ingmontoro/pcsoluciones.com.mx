@@ -28,7 +28,7 @@
 	<!-- link href="//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet" -->
 	<link href="assets/css/bootstrap.min.css?v=1.0001" rel="stylesheet">
     <!-- Site CSS -->
-    <link href="assets/css/custom.css?v=00000000003211" rel="stylesheet">
+    <link href="assets/css/custom.css?v=00000000003212" rel="stylesheet">
     <link href="assets/css/loading.css?v=0000000002" rel="stylesheet">
     <link href="assets/css/tables-style.css?v=000000000200000" rel="stylesheet">
     <link href="assets/css/bootstrap-datetimepicker.min.css" rel="stylesheet">
@@ -56,7 +56,7 @@
       <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
-    <title>Fixed Top Navbar Example for Bootstrap</title>
+    <title><?php echo $GLOBALS['config']['system_name']; ?></title>
     <style type="text/css">
     	.icono-ventana {
     		color: rgba(0,0,0,.5);
@@ -111,7 +111,8 @@
 	<div class="container">
 	  <!-- Main component for a primary marketing message or call to action -->
       <!-- div class="jumbotron" -->
-      	<div id="cue" class="col-md-12">
+      	<!-- <div id="cue" class="col-md-12"> -->
+		<div id="cue" class="">
       		<? $result = $intranet->$accion() ?>
 			<? if (file_exists("views/{$seccion}_{$accion}.php")) include_once "views/{$seccion}_{$accion}.php" ?>
       	</div>

@@ -14,12 +14,19 @@ th {
 .check {
 	margin:0;height:32px;width:32px;margin-left:30px;
 }
+span.indicador {
+	font-size: large;
+    font-weight: bold;
+}
+span.color1 {
+	color:#ef3e36;
+}
 </style>
 
 <div id="divTablaVentas" style="width: 100%; clear: both;"></div>
 <div style="text-align: center; clear: both;">
 	<h2>Ventas del d&iacute;a<br /></h2>
-	<input value="<?=$datos->txtDate1?>" id="ventasDatePicker" style="text-align: center; cursor: pointer;"/>
+	<span class="indicador color1">&gt;&gt;</span> <input value="<?=$datos->txtDate1?>" id="ventasDatePicker" style="text-align: center; cursor: pointer; color:#0d8bca; font-weight:bold;"/> <span class="indicador color1">&lt;&lt;</span>
 </div>
 <div id="divTablaVentas">
 	<div class="text-center">
@@ -28,12 +35,12 @@ th {
 		<?=$datos->actual == $datos->hoy ? '(Hoy)' : ($datos->actual == $datos->ayer ? '(Ayer)' : ($datos->actual == $datos->antier ? '(Antier)' : '')) . ""; ?>
 		</h3>
 	</div>
-	<table id="tablaVentas" style="width:100%;" class="table table-striped table-hover table-clickable">
+	<table id="tablaVentas" style="width:100%;" class="table table-striped table-hover table-clickable table-middle">
 		<tr>
-			<th class="">
+			<th class="text-center fit">
 				Nota N&uacute;m
 			</th>
-			<th class="">
+			<th class="text-center fit">
 				Orden N&uacute;m
 			</th>
 			<th class="">
@@ -61,11 +68,11 @@ th {
 		</tr>
 		<?foreach ($datos->ordenes as $venta) { ?>
 		<tr class="">
-			<td class="">
-				<a href="notas/<?=$venta->numero?>" class="btn btn-default no-shadow"><?=fixFolSize($venta->numero)?></a>
-				<a href="notas/<?=$venta->numero?>" class="ventana "><i class="icono-ventana glyphicon glyphicon-new-window"></i></a>
+			<td class="text-center">
+				<a href="notas/<?=$venta->numero?>" class="btn btn-underline btn-default no-shadow"><?=fixFolSize($venta->numero)?></a>
+				<a href="notas/<?=$venta->numero?>" class="ventana "><span style="font-size:small;">ventana <i class="glyphicon glyphicon-new-window"></i></span></i></a>
 			</td>
-			<td class="">
+			<td class="text-center">
 				<?= isset ($venta->folio) && $venta->folio != '' ? fixFolSize($venta->folio) : '- - - - - -'; ?>
 			</td>
 			<td class="">

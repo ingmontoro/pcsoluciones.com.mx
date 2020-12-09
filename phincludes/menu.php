@@ -23,16 +23,19 @@ img.logo {
     color: #0d8bca;
 }
 .navbar-default .navbar-nav>li>a:hover, .dropdown-menu>li>a {
-    color: #eb693c;
+    /*color: #eb693c;*/
 }
 .dropdown-menu>li>a:hover {
-	background-color: #0d8bca7d;
-	color: #eb693c;
+	/*background-color: #0d8bca7d;*/
+	/*color: #0d8bca !important;*/
+	/*font-weight:bold;*/
+	text-decoration:underline;
 }
 /*fix para que no cambie el color en clientes*/
 .mi-menu>li>a {
 	color: #eb693c !important;
 }
+.icon-bar {background-color:#0d8bca !important;}
 </style>
 <nav id="menu" class="navbar navbar-default navbar-fixed-top">
 	<div class="container">
