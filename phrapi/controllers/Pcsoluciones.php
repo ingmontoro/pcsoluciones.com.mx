@@ -474,12 +474,12 @@ class Pcsoluciones {
 					} else {
 						$valores = array(
 							":cc" => $cc,
-							":fechaCancelacion" => "CURRENT_TIMESTAMP",
+							//":fechaCancelacion" => 'NOW()',
 							":idUsuario" => $this->session->logged,
 						);
 						//cancelamos cobro
 						$this->db->beginTransaction();
-						$this->db->query("UPDATE cobro SET fechaCancelacion = :fechaCancelacion, idUsuarioCancel = :idUsuario WHERE clave = :cc", $valores);
+						$this->db->query('UPDATE cobro SET fechaCancelacion = NOW(), idUsuarioCancel = :idUsuario WHERE clave = :cc', $valores);
 						
 						//Actualizamos estatus de nota
 						$this->db->query("UPDATE nota SET estatus = 4 WHERE numero = {$id}");

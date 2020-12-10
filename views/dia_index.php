@@ -37,11 +37,11 @@ span.color1 {
 	</div>
 	<table id="tablaVentas" style="width:100%;" class="table table-striped table-hover table-clickable table-middle">
 		<tr>
-			<th class="text-center fit">
-				Nota N&uacute;m
+			<th class="text-center">
+				&nbsp;&nbsp;&nbsp;Nota N&uacute;m&nbsp;&nbsp;&nbsp;
 			</th>
 			<th class="text-center fit">
-				Orden N&uacute;m
+				&nbsp;&nbsp;&nbsp;Orden N&uacute;m&nbsp;&nbsp;&nbsp;
 			</th>
 			<th class="">
 				Nombre del Cliente
@@ -68,12 +68,19 @@ span.color1 {
 		</tr>
 		<?foreach ($datos->ordenes as $venta) { ?>
 		<tr class="">
-			<td class="text-center">
+			<td class="text-center fit">
 				<a href="notas/<?=$venta->numero?>" class="btn btn-underline btn-default no-shadow"><?=fixFolSize($venta->numero)?></a>
-				<a href="notas/<?=$venta->numero?>" class="ventana "><span style="font-size:small;">ventana <i class="glyphicon glyphicon-new-window"></i></span></i></a>
+				<br>
+				<a href="notas/<?=$venta->numero?>" class="ventana "><span style="font-size:small;"><?=VENT_EXT?> <i class="glyphicon glyphicon-new-window"></i></span></i></a>
 			</td>
 			<td class="text-center">
-				<?= isset ($venta->folio) && $venta->folio != '' ? fixFolSize($venta->folio) : '- - - - - -'; ?>
+				<?if(isset ($venta->folio) && $venta->folio != '' && $venta->folio != 0) { ?>
+					<a href="ordenes/<?=$venta->folio?>" class="btn btn-underline btn-default no-shadow"><?=fixFolSize($venta->folio)?></a>
+					<br>
+					<a href="ordenes/<?=$venta->folio?>" class="ventana "><span style="font-size:small;"><?=VENT_EXT?> <i class="glyphicon glyphicon-new-window"></i></span></i></a>
+				<?	} else { ?>
+					<?='- - - - - -';?>
+				<?	}?>
 			</td>
 			<td class="">
 				<? 

@@ -9,6 +9,9 @@
 <? $seccion = getString('seccion', 'ordenes') ?>
 <? //$accion = 'index' ?>
 <? //$seccion = 'ordenes' ?>
+<? /*VARIABLES PARA ETIQUETAS/ROTULOS/MENSAJES*/
+	define("VENT_EXT", "ventana ext.");
+?>
 <!DOCTYPE html>
 <html lang="en">
   <head>

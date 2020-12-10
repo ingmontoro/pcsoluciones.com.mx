@@ -28,7 +28,7 @@ th {
 	<div class="table-responsive">
 		<table id="tabla-ordenes" class="table table-striped table-hover table-clickable table-middle">
 			<tr style="background-color: ">
-				<th class="item-num fit">#</th>
+				<th class="item-num">#</th>
 				<th class="text-center">Orden#</th>
 				<th>Nombre del Cliente</th>
 				<th>Descripci&oacute;n</th>
@@ -86,12 +86,12 @@ th {
 					<?=($index + (($paginador->pagina - 1) * $paginador->tamano))?>
 					<? $index ++ ?>
 				</td>
-				<td class="celda-id text-center">
+				<td class="celda-id text-center fit">
 					<!-- a href="index.php?accion=edicion&amp;id=<?=$orden->numero?>" class="btn btn-default"><?=fixFolSize($orden->numero)?></a -->
 					<a href="ordenes/<?=$orden->numero?>" class="btn btn-underline btn-default no-shadow"><?=fixFolSize($orden->numero)?></a>
+					<br>
 					<a href="ordenes/<?=$orden->numero?>" title="abrir en ventana" class="ventana">
-						<br>
-						<span style="font-size:small;">ventana <i class="glyphicon glyphicon-new-window"></i></span>
+						<span style="font-size:small;"><?=VENT_EXT?> <i class="glyphicon glyphicon-new-window"></i></span>
 					</a>
 				</td>
 				<td class="text-capitalize">

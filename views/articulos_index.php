@@ -24,8 +24,8 @@ th {
 		<table id="tabla-articulos" class="table table-striped table-hover table-clickable table-middle">
 			<tr style="background-color:;">
 				<th class="item-num fit">#</th>
-				<th class="text-center ">
-					Código <select class="listadoFiltro" name="a.codigo" onchange="reload(1,0);" style="text-transform: capitalize;">
+				<th class="text-center fit">
+					Código<select class="listadoFiltro" name="a.codigo" onchange="reload(1,0);" style="text-transform: capitalize;">
 						<option value=""></option>
 						<? Html::Options(array("ASC"=>'A-Z', "DESC"=>'Z-A'), $valoresFiltros->codigo) ?>
 					</select>
@@ -72,11 +72,11 @@ th {
 						<?=($index + (($paginador->pagina - 1) * $paginador->tamano))?>
 						<? $index ++ ?>
 					</td>
-					<td class="text-center celda-id">
+					<td class="text-center celda-id fit">
 						<a href="articulos/<?=$orden->codigo?>" class="btn btn-underline btn-default no-shadow"><?=fixFolSize($orden->codigo)?></a>
+						<br>
 						<a href="articulos/<?=$orden->codigo?>" title="abrir en ventana" class="ventana ">
-							<br>
-							<span style="font-size:small;">ventana <i class="glyphicon glyphicon-new-window"></i></span>
+							<span style="font-size:small;"><?=VENT_EXT?> <i class="glyphicon glyphicon-new-window"></i></span>
 						</a>
 					</td>
 					<td class="ord ordCap ordLeft" style="">
