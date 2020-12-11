@@ -70,8 +70,8 @@
 			<span id="changer" style="cursor: pointer;"><?=substr($GLOBALS['config']['system_name'], 0, 1)?></span><?=substr($GLOBALS['config']['system_name'], 1)?>
 		</div -->
 		<div class="div-title">
-				DEVDEV<span id="changer" style="cursor: pointer;"><span style="color:#00a1ec;"><?=substr($GLOBALS['config']['system_name'], 0, 1)?></span><span style="color:orange;"><?=substr($GLOBALS['config']['system_name'], 1, 1)?></span></span><?=substr($GLOBALS['config']['system_name'], 2)?>
-			</div>
+			<span id="changer" style="cursor: pointer;"><span style="color:#00a1ec;"><?=substr($GLOBALS['config']['system_name'], 0, 1)?></span><span style="color:orange;"><?=substr($GLOBALS['config']['system_name'], 1, 1)?></span></span><?=substr($GLOBALS['config']['system_name'], 2)?>
+		</div>
 		<div class="users-container">
 			<!-- <div class="div-title">
 				<span id="changer" style="cursor: pointer;"><?=substr($GLOBALS['config']['system_name'], 0, 1)?></span><?=substr($GLOBALS['config']['system_name'], 1)?>
