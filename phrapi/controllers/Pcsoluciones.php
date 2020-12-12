@@ -119,7 +119,7 @@ class Pcsoluciones {
 				concat( t.numero, ' (', tt.nombre, ')') as telefono
 				FROM orden_servicio os, cliente_domicilio cd, cliente_telefono ct, cliente c, domicilio d, telefono t, tipotelefono tt
 				WHERE os.numero = '{$folio}' and os.idcliente = c.id and cd.idcliente = c.id and ct.idcliente = c.id and cd.claveDomicilio = d.clave
-				and ct.claveTelefono = t.clave and ct.default = 1 and cd.default = 1 and tt.clave = t.tipo");
+				and ct.claveTelefono = t.clave and ct.primario = 1 and cd.primario = 1 and tt.clave = t.tipo");
 		if(isset($filaDatos)) {
 		
 				// Creaci�n del objeto de la clase heredada

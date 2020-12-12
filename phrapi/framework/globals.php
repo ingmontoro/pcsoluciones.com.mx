@@ -318,6 +318,7 @@ function Console($data, $type = "normal") {
 	}
 
 	$backtrace = "";
+	$backtrace = array();
 	$last_func = "";
 	foreach(debug_backtrace() as $_trace) {
 		if (isset($_trace['function']) && in_array($_trace['function'], ['Console'])) {
