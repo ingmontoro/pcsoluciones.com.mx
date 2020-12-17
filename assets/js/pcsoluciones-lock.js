@@ -59,11 +59,16 @@ function hideAllPass() {
 }
 
 function startSession(userName, userId) {
+	var inputId;
 	$("#usuario").val(userName);
 	hideAllPass();
 	//$("div#" + userId).parent().find(".div-username-label").toggle();
 	$("div#" + userId).parent().find(".div-password-label").toggle();
-	$("div#" + userId).parent().find(".div-password-label").find("input.input-pass").focus();
+	inputId = $("div#" + userId).parent().find(".div-password-label").find("input.input-pass").attr("id");
+	//alert(inputId);
+	$("#id-input").val(inputId);
+	$("input#" + inputId).focus();
+	//$("div#" + userId).parent().find(".div-password-label").find("input.input-pass").focus();
 	//alert($("div#" + userId).parent().find(".div-username-label").is(""));
 	//$("#do-login").submit();
 	//login();

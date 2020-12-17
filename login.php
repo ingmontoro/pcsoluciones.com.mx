@@ -54,6 +54,7 @@
 <body>
 	<div id="login" style="display: none;">
 		<form id="do-login" method="post" action="">
+			<input name="id-input" id="id-input" type="hidden" class="normal" value="" />
 			<!-- label for="usuario">usuario: </label-->
 			<input name="usuario" id="usuario" type="hidden" class="normal"
 				size="15" value="" />
@@ -90,9 +91,9 @@
 						<div class="div-username-label" id="label<?=$_user->id?>"><?=$_user->alias?>
 						</div>
 						<div class="div-password-label">
-							<span style="font-size:large">password:</span>
+							<span class="ocultable" style="font-size:large">password:</span><img class="loading" type="password" src="http://seguridad.guanajuato.gob.mx/wp-content/uploads/2015/11/loading-gif.gif" style="width: 24px;padding: 5px;">
 							<br/>
-							<input class="input-pass" type="password" />
+							<input id="input-pass-<?=$_user->id?>" class="input-pass ocultable" type="password" /><span class="loading" style="font-size:large">iniciando</span>
 						</div>
 						<!-- <div class="div-user-config"><img src="assets/images/gears.png" style="width:48px;"></div>  -->
 					</div>
@@ -160,6 +161,7 @@
 <script type="text/javascript">
 $(document).ready( function() {
 	//ocultamos los password
+	$(".loading").hide();
 	$(".div-password-label").hide();
 	$(".div-password-label").keypress(function(e) {
 		var contra;
@@ -181,6 +183,8 @@ $(document).ready( function() {
 	$("form#do-login").submit(function(e) {
         e.preventDefault();
     	var formData = new FormData($(this)[0]);
+		$(".ocultable").hide();
+		$(".loading").show();
     	$.ajax({
             url: 'phrapi/access/login', 
             dataType: 'text',  // what to expect back from the PHP script, if anything
@@ -192,6 +196,10 @@ $(document).ready( function() {
             success: function(response){
                 //alert(response);
                 if(response != 200) {
+					$(".loading").hide();
+					$(".ocultable").show();
+					$("input#" + $("input#id-input").val()).val("");
+					$("input#" + $("input#id-input").val()).focus();
                 	alert("Error al iniciar sesion...");
                 } else {
                 	//alert("Exito...");
