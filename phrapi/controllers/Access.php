@@ -98,6 +98,32 @@ class Access {
 		return $images;
 	}
 	
+	public function savePassword() {
+		if($this->session->logged) {
+			$errorMsg = "";
+			$data = getHash($_POST, array(
+				"id" => FILTER_SANITIZE_PHRAPI_MYSQL,
+				"password" => FILTER_SANITIZE_PHRAPI_MYSQL,
+				"repassword" => FILTER_SANITIZE_PHRAPI_MYSQL
+			));
+			if($data['id'] == $this->session->logged) {
+				if($data['password'] && $data['repassword']) {
+					if(trim($data['password']) != "" && trim($data['repassword']) != "" && trim($data['password']) === trim($data['repassword'])) {
+						$this->db->query ("UPDATE usuario SET password = SHA2(:password, 512) WHERE id = :id",
+						array (":id" => $data['id'], ":password" => $data['password']));
+						return 200;
+					} else {
+						$errorMsg = "No coinciden los passwords o estan vacios";
+					}
+				} else {
+					$errorMsg = "No se recibio el nuevo password";
+				}
+			} else {
+				$errorMsg = "No se recibio el id de usuario correcto";
+			}
+		}
+	}
+	
 	public function saveUserConfig() {
 		$data = getHash($_POST, array(
 			"ajuste" => FILTER_SANITIZE_PHRAPI_MYSQL,

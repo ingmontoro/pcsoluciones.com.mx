@@ -39,6 +39,9 @@ class Pcsoluciones {
 		/*if (!isset($this->session->logged) OR !$this->session->logged) {
 			redirect("login.php");
 		}*/
+		if(!$this->esHoraLaboral()) {
+			unset($this->session->logged);
+		}
 		if(!$this->isLogged()) {
 			redirect("login.php");
 		}
@@ -119,7 +122,7 @@ class Pcsoluciones {
 				concat( t.numero, ' (', tt.nombre, ')') as telefono
 				FROM orden_servicio os, cliente_domicilio cd, cliente_telefono ct, cliente c, domicilio d, telefono t, tipotelefono tt
 				WHERE os.numero = '{$folio}' and os.idcliente = c.id and cd.idcliente = c.id and ct.idcliente = c.id and cd.claveDomicilio = d.clave
-				and ct.claveTelefono = t.clave and ct.primario = 1 and cd.primario = 1 and tt.clave = t.tipo");
+				and ct.claveTelefono = t.clave and ct.primario = 1 and tt.clave = t.tipo");
 		if(isset($filaDatos)) {
 		
 				// Creaci�n del objeto de la clase heredada
@@ -651,6 +654,60 @@ class Pcsoluciones {
 		return compact('code', 'id', 'message');
 	}
 	
+	public function guardarUsuario() {
+		$message = "Falta implementar la logica de guardado...";
+		$data = json_decode($_POST['data']['json']);
+		$code = 200;
+		$id = -1;
+		
+		$clavePersona = (int)$this->db->queryOne("SELECT u.idPersona FROM usuario u WHERE u.id = {$this->session->logged}");
+		
+		if(isset($clavePersona) && $clavePersona > 0) {
+			$valoresPersona = array();
+			$valoresPersona[':no'] = $data->nombre;
+			$valoresPersona[':a1'] = $data->apellido1;
+			$valoresPersona[':a2'] = $data->apellido2;
+			$valoresPersona[':fe'] = date("Y-m-d", strtotime($data->fechanac));
+			//Actualizamos los datos de persona
+			$this->db->beginTransaction();
+			$this->db->query("UPDATE persona SET nombre = :no, apellido1 = :a1, apellido2 = :a2, fechanacimiento = :fe WHERE id = {$clavePersona}", $valoresPersona);
+			//Actualizamos los datos de usuario
+			$this->db->query("UPDATE usuario SET alias = '{$data->alias}' WHERE id = {$this->session->logged}", $valoresPersona);
+		}
+		$message = "Datos de usuario actualizados correctamente";
+		//$id = $data->numcli;
+		$this->db->commit();
+		return compact('code', 'id', 'message');
+	}
+	
+	public function cambiarPassword() {
+		$message = "Falta implementar la logica de guardado...";
+		$data = json_decode($_POST['data']['json']);
+		$code = 400;
+		$id = -1;
+		
+		$id = $this->session->logged;
+		
+		if(!isset($data->cpass) || $data->cpass == "") {
+			$message = "Contraseña actual no puede estar vacia.";
+		} else if(!isset($data->npass)) {
+			$message = "Contraseña nueva invalida.";
+		} else {
+			$id = (int)$this->db->queryOne("SELECT u.id FROM usuario u WHERE u.id = {$this->session->logged} AND u.password = SHA2('{$data->cpass}', 512)");
+			if(!isset($id) || $id <= 0 || $id != $this->session->logged) {
+				$message = "Contraseña actual invalida o usuario incorrecto";
+			} else {
+				//Actualizamos la contraseña
+				$this->db->beginTransaction();
+				$this->db->query("UPDATE usuario SET password = SHA2('{$data->npass}', 512) WHERE id = {$id}");
+				$this->db->commit();
+				$code = 200;
+				$message = "Contraseña actualizada correctamente";
+			}
+		}
+		return compact('code', 'id', 'message');
+	}
+	
 	public function guardarCliente() {
 		$actualizar = false;
 		$message = "Falta implementar la logica de guardado...";
@@ -774,9 +831,11 @@ class Pcsoluciones {
 	
 	public function editar() {
 	
+		$idUsuario = $this->session->logged;
 		$id = getValueFrom($_GET, 'id', 0, FILTER_SANITIZE_PHRAPI_MYSQL);
 		$idsec = getValueFrom($_GET, 'idsec', 0, FILTER_SANITIZE_PHRAPI_INT);
 		$entidad = getValueFrom($_GET, 'seccion', '', FILTER_SANITIZE_PHRAPI_MYSQL);
+		$tab = getValueFrom($_GET, 'tab', '', FILTER_SANITIZE_PHRAPI_MYSQL);
 		$datos = new stdClass();
 		if($entidad == 'articulos') {
 			if($id != '') {
@@ -791,6 +850,13 @@ class Pcsoluciones {
 				$datosCliente = $this->buscarCliente($id);
 			}
 			return compact('id', 'datosCliente');
+		}
+		if($entidad == 'usuarios') {
+			$datosUsuario;
+			if($idUsuario != 0) {
+				$datosUsuario = $this->buscarUsuario();
+			}
+			return compact('idUsuario', 'datosUsuario', 'tab');
 		}
 		if($entidad == 'ordenes') {
 			$datosCliente;
@@ -859,6 +925,24 @@ class Pcsoluciones {
 			}
 			return compact('datos', 'id', 'idsec', 'datosCliente');
 		}
+	}
+	
+	private function esHoraLaboral() {
+		$now = new Datetime("now");
+		$begintime = new DateTime('09:30');
+		$endtime = new DateTime('21:30');
+		if(($this->session->logged != 3 && $this->session->logged != 10)) {
+			if($now >= $begintime && $now <= $endtime){
+				// between times
+				//echo "yay";
+				return true;
+			} else {
+				// not between times
+				//echo "nay";
+				return false;
+			}
+		}
+		return true;
 	}
 	
 	public function index() {
@@ -1432,6 +1516,23 @@ class Pcsoluciones {
 		and cd.clavedomicilio = d.clave
 		and ct.clavetelefono = t.clave"
 		);
+		return $datos;
+	}
+	
+	private function buscarUsuario() {
+		$datos = $this->db->queryRow(
+		"SELECT
+			200 as code,
+			u.login,
+			u.alias,
+			u.profile,
+			p.nombre,
+			p.apellido1,
+			p.apellido2,
+			DATE_FORMAT(p.fechanacimiento, '%d-%m-%Y') as fechanacimiento
+		FROM usuario u
+		INNER JOIN persona p ON u.idpersona = p.id
+		WHERE u.id = '{$this->session->logged}'");
 		return $datos;
 	}
 	

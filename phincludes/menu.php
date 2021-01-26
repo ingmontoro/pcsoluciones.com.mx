@@ -126,6 +126,17 @@ img.logo {
 			</ul>
 			<div></div>
 			<ul class="nav navbar-nav navbar-right">
+				<li class="active_ dropdown">
+					<a href="#" class="dropdown-toggle"
+						data-toggle="dropdown" role="button" aria-haspopup="true"
+						aria-expanded="false" style="font-size:small;">Mi cuenta <span class="caret">
+					</a>
+					<ul class="dropdown-menu mi-menu">
+						<li><a class="click-loader" href="usuarios/add" style="font-size:small;">editar mis datos</a></li>
+						<li><a class="click-loader" href="usuarios/add?tab=password" style="font-size:small;">cambiar password</a></li>
+						<li role="separator" class="divider"></li>
+					</ul>
+				</li>
 				<li style="margin-right: 15px;">
 					<a style="padding: 10px;color: #337ab7;font-size: small;font-weight: 700;text-align:center;" href="phrapi/access/logout">
 						<?=$factory->Access->alias()?><br>

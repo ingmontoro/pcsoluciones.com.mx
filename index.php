@@ -164,6 +164,7 @@
 		$(idAlert).removeClass("alert-warning");
 		$(idAlert).removeClass("alert-success");
 		$(idAlert).removeClass("alert-danger");
+		$(idAlert).removeClass("alert-primary");
 		$(idAlert).addClass('alert-' + clase);
 		$(idAlert).fadeIn();
 	}

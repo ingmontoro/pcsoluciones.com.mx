@@ -10,21 +10,21 @@ table>tbody>tr>td>div {
 <h3>Datos del cliente.</h3>
 <div>
 	<ul class="nav nav-tabs" id="myTab" role="tablist">
-	<?if(isset($showficha) && $showficha):?>
-	<li class="nav-item">
-	    <a class="nav-link active" id="sheet-tab" data-toggle="tab" href="#sheet" role="tab" aria-controls="sheet" aria-selected="false">Ficha</a>
-	  </li>
-	  <li class="nav-item">
-	    <a class="nav-link" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Nombre y contacto</a>
-	  </li>
-	  <?else:?>
-	  <li class="nav-item">
-	    <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Nombre y contacto</a>
-	  </li>
-	 <?endif;?>
-	  <li class="nav-item">
-	    <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Datos fiscales</a>
-	  </li>
+		<?if(isset($showficha) && $showficha):?>
+		<li class="nav-item">
+			<a class="nav-link active" id="sheet-tab" data-toggle="tab" href="#sheet" role="tab" aria-controls="sheet" aria-selected="false">Ficha</a>
+		</li>
+		<li class="nav-item">
+			<a class="nav-link" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Nombre y contacto</a>
+		</li>
+		<?else:?>
+		<li class="nav-item">
+			<a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Nombre y contacto</a>
+		</li>
+		<?endif;?>
+		<li class="nav-item">
+			<a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Datos fiscales</a>
+		</li>
 	</ul>
 </div>
 <form id="cliente-form" role="form" data-toggle="validator">
@@ -272,9 +272,9 @@ $('#cliente-form').validator().on('submit', function (e) {
   }
 });
 $("#cliente-alert-button").on("click", function(e) {
-		e.preventDefault();
-		$("#cliente-alert").hide();
-	});
+	e.preventDefault();
+	$("#cliente-alert").hide();
+});
 $(document).ready(function() {
 	hideLoading();
 	$("#cliente-alert").hide();
