@@ -71,6 +71,42 @@ function cambio() {
 /*
  * Registra el cobro de una nota
  */
+ 
+function printTicketR() {
+	
+	var url = 'phrapi/imprimir/remoteTicket';
+	var _request = $.post( url, { 
+		data: $("#ticketJson").val()
+	});
+	
+	_request.done( function(response) {
+		//validarSesion(entity, response);
+		$("#detalle-ticket").html(response.replace('null', ''));
+		$("#ticket-modal").modal();
+	});
+	_request.fail( function( jqXHR, textStatus ) {
+		alert("FAIL");
+	});	
+	
+	
+	var entity = 'nota';
+    var url = 'phrapi/imprimir/' + entity;
+	var _request = $.post(url, {numero: $('#numnota').val()}, 'json');
+	_request.done(function(response) {
+		response = JSON.parse(response);
+		var clase = '';
+		if (response.code == 200) {
+			clase = "success";
+		} else {
+			clase = "warning";
+		}
+		configAlert(entity, clase, response.message);
+	});
+	_request.fail( function( jqXHR, textStatus ) {
+		configAlert(entity, 'danger', textStatus);
+	});
+}
+ 
 function printTicket() {
 	var entity = 'nota';
     var url = 'phrapi/imprimir/' + entity;
@@ -92,6 +128,46 @@ function printTicket() {
 /*
  * Registra el cobro de una nota
  */
+ function generarCobroR(imprimir) {
+	//Antes que nada guardamos la nota
+	if (hayCambios('cambios')) {
+		guardarNota();
+	}
+	var datos = JSON.stringify({
+		numero: $('#numnota').val(),
+		entregado: $('#cobro-entregado').val().replace(',',''),
+		tipo: $('#impresora').val(),
+		imprimir: false //para que no imprima de forma local
+    });
+    var entity = 'nota';
+    var url = 'phrapi/cobrar/' + entity;
+	var _request = $.post(url, {data: {json: datos}}, 'json');
+	_request.done(function(response) {
+		response = JSON.parse(response);
+		var clase = '';
+		if (response.code == 200) {
+			$('#statusNota').val(3);
+			//actualizamos datos del ticket par poder imprimir
+			if (response.datos != "") {
+				$("#ticketJson").val(response.datos);
+			}
+			//intentamos imprimir
+			if(imprimir) {
+				printTicketR();
+			}
+			bloquearCobro();
+			setBotones();
+			clase = "success";
+		} else {
+			clase = "warning";
+		}
+		configAlert('cobro', clase, response.message);
+	});
+	_request.fail( function( jqXHR, textStatus ) {
+		configAlert('cobro', 'danger', textStatus);
+	});
+}
+ 
 function generarCobro(imprimir) {
 	//Antes que nada guardamos la nota
 	if (hayCambios('cambios')) {

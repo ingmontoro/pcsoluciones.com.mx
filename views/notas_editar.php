@@ -126,7 +126,9 @@ hr{
 								<button id='boton_cancelar_nota' class="btn btn-danger" type="button" onclick="cancelarConfirm();">Cancelar Nota</button>
 								<button id='boton_cobrar_nota' class="btn btn-primary" type="button" onclick="cobrarTicket();">Cobrar</button>
 								<button id='boton_ver_ticket' class="btn btn-warning" type="button" onclick="showTicket1();">Ver ticket</button>
+								<button id='boton_ver_ticket' class="btn btn-warning" type="button" onclick="showTicketR();">Ver ticket R</button>
 								<button id='boton_imprimir_ticket' class="btn btn-warning" type="button" onclick="printTicket(this);">Imprimir ticket</button>
+								<button id='boton_imprimir_ticket' class="btn btn-warning" type="button" onclick="printTicketR(this);">Imprimir ticket R</button>
 								<button id='boton_guardar_nota' class="btn btn-primary" type="button" onclick="guardarNota();">Guardar nota</button>
 								<button id="boton_limpiar_nota" class="btn btn-default" type="button" onclick="limpiarConfirm();">Limpiar Nota</button>
 								<?if(isset($datos->orden->numero) && $datos->orden->numero != '' && $datos->orden->numero > 0 && $datos->estatus == 4):?>
@@ -160,6 +162,9 @@ hr{
 					<td class="text-right special" style="min-width: 120px;"><span class="pull-left">$</span><span id="total">0.00</span><!-- span class="_simbolo">MXN</span --></td>
 				</tr>
 			</table>
+		</div>
+		<div>
+			<textarea id="ticketJson"><?=isset($datos->dataTicket) && $datos->dataTicket != "" ? $datos->dataTicket : ""?></textarea>
 		</div>
 	</form>
 </div>
@@ -195,6 +200,7 @@ hr{
       <div class="modal-footer" style="text-align:center;">
       	<button id="btn-cobrar" type="button" class="btn btn-primary" onclick="generarCobro(false);">Cobrar</button>
       	<button id="btn-imprimir" type="button" class="btn btn-primary" onclick="generarCobro(true);">Cobrar e imprimir</button>
+		<button id="btn-imprimir" type="button" class="btn btn-primary" onclick="generarCobroR(true);">Cobrar e imprimir R</button>
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
       </div>
     </div>
@@ -907,6 +913,21 @@ function createUniqueID() {
  		       }
  			});
  		$("#ticket-modal").modal();
+	}
+	function showTicketR() {
+ 	 	var url = 'phrapi/mostrar/remoteTicket';
+		var _request = $.post( url, { 
+			data: $("#ticketJson").val()
+	    });
+		
+		_request.done( function(response) {
+			//validarSesion(entity, response);
+			$("#detalle-ticket").html(response.replace('null', ''));
+			$("#ticket-modal").modal();
+		});
+		_request.fail( function( jqXHR, textStatus ) {
+			alert("FAIL");
+		});		
 	}
  /*
   * Calcula importes y totales enl a nota de venta
