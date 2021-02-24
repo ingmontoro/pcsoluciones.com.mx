@@ -357,10 +357,22 @@ class Pcsoluciones {
 		return compact('code', 'id', 'message');*/
 	}
 	
+	public function showTicketRemote(){
+		$data = json_decode($_POST['data']);
+		//D($data);
+		//return;
+		
+		$ticket = new Ticket();
+		$html = $ticket->showTicketRemote($data);
+		echo $html;
+		
+	}
+	
 	public function cobrarNota() {
 	
 		$message = "Falta implementar la logica de guardado...";
 		$data = json_decode($_POST['data']['json']);
+		$datos = "";
 	
 		$code = 400;
 		$id = -1;
@@ -411,9 +423,12 @@ class Pcsoluciones {
 						}
 						$message = "Cobro registrado correctamente.";
 						$code = 200;
+						//generamos ticketData para devolver...
+						$ticket = new Ticket();
+						$datos = json_encode($ticket->dataTicket($id));
 						if(isset($data->imprimir) && $data->imprimir == 'true') {
 							//$message .= $this->printTicket($id, $data->entregado, $cambio, $datosCobro->fechaCobro);
-							$ticket = new Ticket();
+							
 							$result = $ticket->printTicket($id, $data->entregado, $cambio, $datosCobro->fechaCobro, null, $data->tipo);
 							if($result == '') {
 								$message .= " Ticket Impreso O.K. ";
@@ -430,6 +445,33 @@ class Pcsoluciones {
 				}
 			}
 		}
+		return compact('code', 'id', 'message', 'datos');
+	}
+	
+	public function printTicketRemote() {
+		
+		$data = json_decode($_POST['data']);
+		//D($data);
+		//return;
+		
+		$message = "Falta implementar la logica de guardado...";
+		$code = 400;
+		$message = "";
+		//$data = $this->db->queryRow("SELECT entregado, fechaCobro, cambio, ifnull(impresora, 2) impresora, u.alias FROM cobro JOIN usuario u ON idUsuario = u.id AND claveNota = {$id}");
+		$ticket = new Ticket();
+		
+		D($data);
+		
+		return;
+			
+		$result = $ticket->printTicketRemote($data);
+		//$result = $ticket->printTicket1($id, $data->entregado, $data->cambio, $data->fechaCobro);
+		if($result == '') {
+			$message .= " Ticket Impreso O.K. ";
+		} else {
+			$message .= " No se pudo imprimir el ticket: [{$result}]";
+		}
+		
 		return compact('code', 'id', 'message');
 	}
 	
@@ -911,6 +953,11 @@ class Pcsoluciones {
 					WHERE dn.folio = '{$id}'"));
 				$idsec = (int)$datos->folio;
 				$datos->aplicaiva = $datos->iva > 0 ? true : false;
+				//validamos que la nota este cobrada para enviar el json del ticket
+				if($datos->estatus == 3) {
+					$ticket = new Ticket();
+					$datos->dataTicket = json_encode($ticket->dataTicket($id));
+				}
 			}
 			$datos->orden = new stdClass();
 			$datos->orden->numero = 0;
@@ -944,6 +991,53 @@ class Pcsoluciones {
 		}
 		return true;
 	}
+	
+	/*private function dataTicket($numero) {
+		$data = new stdClass();
+		$data->numero = $numero;
+		$impresora = (int)$this->db->queryOne("SELECT impresora FROM cobro WHERE claveNota = {$numero}");
+		$data->impresora = $impresora;
+		if($impresora == 1) {
+			$data->datosCobro = $this->db->queryRow("SELECT c.fechaCobro, c.total, c.entregado, c.cambio, ifnull(c.impresora, 2) impresora, u.alias FROM nota n INNER JOIN cobro c INNER JOIN usuario u ON n.claveCobro = c.clave AND n.numero = c.claveNota AND c.idUsuario = u.id AND n.numero = {$numero}");
+		} else {
+			$data->datosCobro = $this->db->queryRow("SELECT c.fechaCobro, c.total, c.entregado, c.cambio, ifnull(c.impresora, 2) impresora FROM nota n INNER JOIN cobro c ON n.claveCobro = c.clave AND n.numero = c.claveNota AND n.numero = {$numero}");
+		}
+		$data->detalleTicket = 
+		//$detalleTicket = $this->db->queryAll(
+		$this->db->queryAll(
+				"SELECT * FROM (select n.numero,
+				n.subtotal,
+				n.iva,
+				n.total,
+				UPPER(if(a.codigo = 'free', '0', a.codigo)) codigo,
+				dn.precio,
+				dn.cantidad,
+				dn.descripcion,
+				dn.precio * dn.cantidad importe
+				from nota n
+				join detalle_nota dn on n.numero = dn.folio
+				left join articulo a on a.codigo = dn.claveArticulo
+				where n.numero = $numero
+				and dn.claveArticulo = 'free'
+				and a.codigo = 'free'
+				UNION
+				select n.numero,
+				n.subtotal,
+				n.iva,
+				n.total,
+				UPPER(a.codigo),
+				a.precio,
+				dn.cantidad,
+				a.corta,
+				a.precio * dn.cantidad importe
+				from nota n
+				join detalle_nota dn on n.numero = dn.folio
+				left join articulo a on a.codigo = dn.claveArticulo
+				where n.numero = $numero
+				and dn.claveArticulo != 'free') K ORDER BY k.codigo, k.descripcion");
+		return $data;
+	}*/
+	
 	
 	public function index() {
 		//D("HI");

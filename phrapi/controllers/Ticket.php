@@ -30,8 +30,99 @@ class Ticket {
 		date_default_timezone_set("America/Mexico_City");
 	}
 	
+	public function dataTicket($numero) {
+		$data = new stdClass();
+		$data->numero = $numero;
+		$impresora = (int)$this->db->queryOne("SELECT impresora FROM cobro WHERE claveNota = {$numero}");
+		$data->impresora = $impresora;
+		if($impresora == 1) {
+			//$data->datosCobro = $this->db->queryRow("SELECT c.fechaCobro, c.total, c.entregado, c.cambio, ifnull(c.impresora, 2) impresora, u.alias FROM nota n INNER JOIN cobro c INNER JOIN usuario u ON n.claveCobro = c.clave AND n.numero = c.claveNota AND c.idUsuario = u.id AND n.numero = {$numero}");
+			$data->datosCobro = $this->db->queryRow("SELECT c.fechaCobro, c.total, c.entregado, c.cambio, ifnull(c.impresora, 2) impresora, ifnull(u.alias, 'Mostrador') as alias FROM nota n INNER JOIN cobro c INNER JOIN usuario u ON n.claveCobro = c.clave AND n.numero = c.claveNota AND c.idUsuario = u.id AND n.numero = {$numero}");
+		} else {
+			$data->datosCobro = $this->db->queryRow("SELECT c.fechaCobro, c.total, c.entregado, c.cambio, ifnull(c.impresora, 2) impresora, ifnull(u.alias, 'Mostrador') as alias FROM nota n INNER JOIN cobro c ON n.claveCobro = c.clave AND n.numero = c.claveNota AND n.numero = {$numero} LEFT JOIN usuario u ON c.idUsuario = u.id");
+			//$data->datosCobro = $this->db->queryRow("SELECT c.fechaCobro, c.total, c.entregado, c.cambio, ifnull(c.impresora, 2) impresora FROM nota n INNER JOIN cobro c ON n.claveCobro = c.clave AND n.numero = c.claveNota AND n.numero = {$numero}");
+		}
+		$data->detalleTicket = 
+		$this->db->queryAll(
+				"SELECT * FROM (select n.numero,
+				n.subtotal,
+				n.iva,
+				n.total,
+				UPPER(if(a.codigo = 'free', '0', a.codigo)) codigo,
+				dn.precio,
+				dn.cantidad,
+				dn.descripcion,
+				dn.precio * dn.cantidad importe
+				from nota n
+				join detalle_nota dn on n.numero = dn.folio
+				left join articulo a on a.codigo = dn.claveArticulo
+				where n.numero = $numero
+				and dn.claveArticulo = 'free'
+				and a.codigo = 'free'
+				UNION
+				select n.numero,
+				n.subtotal,
+				n.iva,
+				n.total,
+				UPPER(a.codigo),
+				a.precio,
+				dn.cantidad,
+				a.corta,
+				a.precio * dn.cantidad importe
+				from nota n
+				join detalle_nota dn on n.numero = dn.folio
+				left join articulo a on a.codigo = dn.claveArticulo
+				where n.numero = $numero
+				and dn.claveArticulo != 'free') K ORDER BY k.codigo, k.descripcion");
+		return $data;
+	}
+	
+	private function ticketToHTML($data) {
+		
+		$impresora = $data->impresora;
+		$datosCobro = $data->datosCobro;
+		$myTime = localtime(strtotime($datosCobro->fechaCobro), true);
+		$fecha = $myTime['tm_mday'] . "/" . $this->meses[$myTime['tm_mon']] . "/" . (1900 + $myTime['tm_year']);
+		$detalleNota = $data->detalleTicket;
+		if(isset($detalleNota) && count($detalleNota) > 0) {
+			$this->tipo = $datosCobro->impresora;
+			$this->startTicket();
+			$this->printHeader($data->numero, $fecha, $datosCobro->impresora);
+			$this->printItems($detalleNota, $datosCobro->impresora);
+			$this->printTotal($detalleNota, $datosCobro, $datosCobro->impresora);
+			$this->printFooter($datosCobro);
+			$this->endTicket();
+		}
+		return $this->theHTML;
+	}
+	
+	public function showTicketRemote($data) {
+		return $this->ticketToHTML($data);
+		/*//$data = json_decode($_POST['data']['json']);
+		//$data = json_decode($data);
+		$impresora = $data->impresora;
+		$datosCobro = $data->datosCobro;
+		//$datosCobro = $this->db->queryRow("SELECT c.fechaCobro, c.total, c.entregado, c.cambio, ifnull(c.impresora, 2) impresora, u.alias FROM nota n INNER JOIN cobro c INNER JOIN usuario u ON n.claveCobro = c.clave AND n.numero = c.claveNota AND c.idUsuario = u.id AND n.numero = {$numnota}");
+		$myTime = localtime(strtotime($datosCobro->fechaCobro), true);
+		$fecha = $myTime['tm_mday'] . "/" . $this->meses[$myTime['tm_mon']] . "/" . (1900 + $myTime['tm_year']);
+		$detalleNota = $data->detalleTicket;
+		
+		if(isset($detalleNota) && count($detalleNota) > 0) {
+			$this->tipo = $datosCobro->impresora;
+			$this->startTicket();
+			$this->printHeader($data->numero, $fecha, $datosCobro->impresora);
+			$this->printItems($detalleNota, $datosCobro->impresora);
+			$this->printTotal($detalleNota, $datosCobro, $datosCobro->impresora);
+			$this->printFooter($datosCobro);
+			$this->endTicket();
+		}
+		return $this->theHTML;*/
+	}
+	
 	public function showTicket($numnota = 0) {
-		$impresora = (int)$this->db->queryOne("SELECT impresora FROM cobro WHERE claveNota = {$numnota}");
+		return $this->ticketToHTML($this->dataTicket($numnota));
+		
+		/*$impresora = (int)$this->db->queryOne("SELECT impresora FROM cobro WHERE claveNota = {$numnota}");
 		if($impresora == 1) {
 			$datosCobro = $this->db->queryRow("SELECT c.fechaCobro, c.total, c.entregado, c.cambio, ifnull(c.impresora, 2) impresora, u.alias FROM nota n INNER JOIN cobro c INNER JOIN usuario u ON n.claveCobro = c.clave AND n.numero = c.claveNota AND c.idUsuario = u.id AND n.numero = {$numnota}");
 		} else {
@@ -81,7 +172,8 @@ class Ticket {
 			$this->printFooter($datosCobro);
 			$this->endTicket();
 		}
-		return $this->theHTML;
+		//D($this->theHTML);
+		return $this->theHTML;*/
 	}
 	private function startTicket() {
 		$this->theHTML .=  "<table style='font-family: arial; font-size: 12px; pading: 0;'>";
@@ -264,7 +356,7 @@ class Ticket {
 	//private function printFooter($atendio = null, $tipo = 1) {
 	private function printFooter($datosCobro) {
 		if($datosCobro->impresora == 1) {
-			if($datosCobro->alias != null){
+			if(isset($datosCobro->alias) && $datosCobro->alias != null){
 				$this->printLine($this->printWithFormat("Le atendió {$datosCobro->alias}", 'C'));
 			}
 			$this->printLine($this->printWithFormat('------------------------------------------------'));
@@ -278,7 +370,7 @@ class Ticket {
 			$this->printBlankLine();
 			$this->printLine($this->printWithFormat(  'Recuerde conservar este', 'C'));
 			$this->printLine($this->printWithFormat(  'comprobante para cualquier', 'C'));
-			$this->printLine($this->printWithFormat(  'aclaración o garantía.', 'C'));
+			$this->printLine($this->printWithFormat(  'aclaración o garantía', 'C'));
 		}
 		
 	}
@@ -293,7 +385,7 @@ class Ticket {
 		}
 		return $newData;
 	}
-	private function detalleTicket($numero) {
+	public function detalleTicket($numero) {
 		$detalleTicket = $this->db->queryAll(
 				"SELECT * FROM (select n.numero,
 				n.subtotal,
@@ -326,6 +418,194 @@ class Ticket {
 				where n.numero = $numero
 				and dn.claveArticulo != 'free') K ORDER BY k.codigo, k.descripcion");
 		return $detalleTicket;
+	}
+	
+	public function printTicketRemote($data) {
+		$mode = "prod";
+		$numero = $data->numero;
+		$entregado = $data->datosCobro->entregado;
+		$cambio = $data->datosCobro->cambio;
+		$fechaCobro = $data->datosCobro->fechaCobro;
+		$atendio = $data->datosCobro->alias;
+		$impresora = $data->datosCobro->impresora;
+		
+		date_default_timezone_set("America/Mexico_City");
+		$myTime = localtime(strtotime($fechaCobro), true);
+		$fecha = $myTime['tm_mday'] . "/" . $this->meses[$myTime['tm_mon']] . "/" . (1900 + $myTime['tm_year']);
+		$message = "";
+		//$message .= " - {$impresora}";
+		$detalleTicket = $data->detalleTicket;
+		if(isset($detalleTicket) && count($detalleTicket) > 0) {
+			if($impresora == 1) {
+				try {
+					$connector = null;
+					$connector = new WindowsPrintConnector("EPSONT20");
+					//$connector = new WindowsPrintConnector("SamsungM2020");
+					//$connector = new WindowsPrintConnector("faltaDato");
+					$profile = DefaultCapabilityProfile::getInstance();
+					$printer = new Printer($connector);
+					//$atendio = $atendio == null ? $this->db->queryOne("SELECT u.alias FROM usuario u INNER JOIN cobro c on u.id = c.idUsuario INNER JOIN nota n on n.claveCobro = c.clave WHERE n.numero = '{$numero}'") : $atendio;
+						
+					try {
+						//INICIA CONFIGURACION DEL TICKET
+						$img = EscposImage::load('../assets/images/pcsol-logo.png', false);
+						$printer -> setJustification(Printer::JUSTIFY_CENTER);
+						$printer -> graphics($img);
+						$printer -> feed();
+						$printer -> text("MEDRANO #2799 RESIDENCIAL DEL PARQUE C.P. 44810\n");
+						$printer -> text("GUADALAJARA JAL. TEL(33)33319708\n");
+						$printer -> text("ERNESTO MONTORO RODRIGUEZ\n");
+						$printer -> text("R.F.C MORE820615PI1\n");
+						$printer -> text("TICKET# ");
+						$this->bold($printer, $this->fixFieldSize($numero, 7, 'L', '0'));
+						$printer -> text(" FECHA:");
+						$this->bold($printer, $this->fixFieldSize($fecha, 11, 'L', '0'));
+						$printer -> text("\n");
+						$printer -> text("------------------------------------------------");
+						$printer -> text("CODIGO CONCEPTO        PRECIO/UN CANT.   IMPORTE");
+						$printer -> text("------------------------------------------------");
+			
+						foreach ($detalleTicket as $item) {
+							$printer -> text($this->fixFieldSize($item->codigo, 6, '', '0') . " ");
+							$printer -> text($this->fixFieldSize($item->descripcion, 15, 'R') . " ");
+							$printer -> text($this->formatPrecio($item->precio) . " ");
+							$printer -> text($this->formatCantidad($item->cantidad) . " ");
+							$printer -> text($this->formatPrecio($item->importe));
+						}
+						$printer -> text("------------------------------------------------");
+						if ($item->iva > 0) {
+							$printer -> text($this->fixFieldSize("SUBTOTAL", 38) . " " . $this->formatPrecio($item->subtotal) . "\n");
+							$printer -> text($this->fixFieldSize("IVA", 38) . " " . $this->formatPrecio($item->iva) . "\n");
+						}
+						$this->bold($printer, $this->fixFieldSize("TOTAL", 38) . " " . $this->formatPrecio($item->total) . "\n");
+						$printer -> text($this->fixFieldSize("RECIBE", 38) . " " . $this->formatPrecio($entregado) . "\n");
+						$printer -> text($this->fixFieldSize("CAMBIO", 38) . " " . $this->formatPrecio($cambio) . "\n");
+						$totalf = number_format($item->total, 2, '.', '');
+						$enletra = $this->num2letras($totalf);
+						$printer -> setJustification(Printer::JUSTIFY_LEFT);
+						$printer -> text("\n{$enletra}\n");
+						$printer -> setJustification(Printer::JUSTIFY_CENTER);
+						if(isset($atendio)) {
+							$printer -> text("\n\nLe atendió {$atendio}.\n");
+						}
+						$printer -> text("------------------------------------------------");
+						$this->bold($printer, "Gracias por su Visita.\n");
+						$printer -> text("Recuerde conservar este ticket como comprobante\n");
+						$printer -> text("para cualquier aclaración o garantía.\n");
+						$printer -> text("------------------------------------------------");
+						$printer -> feed();
+						//FIN CONFIGURACION DEL TICKET
+						//INICIAN PRUEBAS
+						//FIN DE PRUEBAS
+						$printer -> cut();
+						//$printer -> pulse();
+					} catch (Exception $e2) {
+						/* Images not supported on your PHP, or image file not found */
+						$message .= $printer->text($e2->getMessage() . "\n");
+					}
+					$printer -> close();
+				} catch(Exception $e1) {
+					$message = $e1->getMessage();
+				}
+			} else {
+				try {
+					$printer = "\\\\SERVER\\POS58";
+					if ($ph = @printer_open($printer)) {
+						$atendio = $atendio == null ? $this->db->queryOne("SELECT u.alias FROM usuario u INNER JOIN cobro c on u.id = c.idUsuario INNER JOIN nota n on n.claveCobro = c.clave WHERE n.numero = '{$numero}'") : $atendio;
+							
+						printer_set_option($ph, PRINTER_MODE, "RAW");
+						//PRINT HEADER
+						printer_write($ph, $this->printWithFormat('P C-S O L U C I O N E S', 'C'));
+						printer_write($ph, "\n\r");
+						printer_write($ph, $this->printWithFormat('MEDRANO #2799 RESIDENCIAL DEL', 'C'));
+						printer_write($ph, $this->printWithFormat('PARQUE 44810 TEL (33)33319708', 'C'));
+						//printer_write($ph, printWithFormat('CEL (044)3314862595', 'C'));
+						printer_write($ph, $this->printWithFormat('ERNESTO MONTORO RODRIGUEZ', 'C'));
+						printer_write($ph, $this->printWithFormat('R.F.C: MORE820615PI1', 'C'));
+						printer_write($ph, $this->printWithFormat('TICKET#' . $this->fixFieldSize($numero, 7, 'L', '0') . " FECHA:" . $this->fixFieldSize($fecha, 11, 'L', '0')));
+						//FIN HEADER
+						printer_write($ph, $this->printWithFormat("--------------------------------"));
+						printer_write($ph, $this->printWithFormat("NUM CODIGO ARTICULO             "));
+							
+							
+						$i = 1;
+						foreach ($detalleTicket as $item) {
+							$line = "";
+							$line .= $this->formatIndex($i);
+							$line .= $this->fixFieldSize($item->codigo, 6, '', '0');
+							$line .= ":";
+							$line .= $this->fixFieldSize($item->descripcion, 21, 'R');
+							printer_write($ph, $this->printWithFormat($line));
+							$i ++;
+						}
+							
+						printer_write($ph, $this->printWithFormat("--------------------------------"));
+						printer_write($ph, $this->printWithFormat("NUM PRECIO/U  CANTIDAD   IMPORTE"));
+							
+						$i = 1;
+						foreach ($detalleTicket as $item) {
+								
+							$line = "";
+							$line .= $this->formatIndex($i);
+							$line .= "$";
+							$line .= $this->fixFieldSize(number_format($item->precio, 2, '.', ','));
+							$line .= "  ";
+							$line .= $this->fixFieldSize($item->cantidad, 5, 'R');
+							$line .= " ";
+							$line .= "$";
+							$line .= $this->fixFieldSize(number_format($item->importe, 2, '.', ','));
+							printer_write($ph, $this->printWithFormat($line));
+							$i ++;
+						}
+							
+						printer_write($ph, $this->printWithFormat("--------------------------------"));
+							
+						//printTotal($ph, $item, $recibe);
+						$line = "";
+						if ($item->iva > 0) {
+							$line .= "SUBTOTAL              $";
+							$line .= $this->fixFieldSize(number_format($item->subtotal, 2, '.', ','));
+							printer_write($ph, $this->printWithFormat($line));
+							$line = "";
+							$line .= "IVA                   $";
+							$line .= $this->fixFieldSize(number_format($item->iva, 2, '.', ','));
+							printer_write($ph, $this->printWithFormat($line));
+						}
+						$line = "";
+						$line .= "TOTAL                 $";
+						$line .= $this->fixFieldSize(number_format($item->total, 2, '.', ','));
+						printer_write($ph, $this->printWithFormat($line));
+						$line = "";
+						$line .= "RECIBE                $";
+						$line .= $this->fixFieldSize(number_format($entregado, 2, '.', ','));
+						printer_write($ph, $this->printWithFormat($line));
+						$line = "";
+						$line .= "CAMBIO                $";
+						$line .= $this->fixFieldSize(number_format($cambio, 2, '.', ','));
+						printer_write($ph, $this->printWithFormat($line));
+							
+						//FOOTER
+						printer_write($ph, "\n\r");
+						printer_write($ph, $this->printWithFormat('Gracias por su Visita', 'C'));
+						printer_write($ph, "\n\r");
+						printer_write($ph, $this->printWithFormat(  'Recuerde conservar este', 'C'));
+						printer_write($ph, $this->printWithFormat(  'comprobante para cualquier', 'C'));
+						printer_write($ph, $this->printWithFormat(  'aclaración o garantía.', 'C'));
+						//Avanzar papel
+						printer_write($ph, "\n\r\n\r\n\r\n\r\n\r");
+						//FIN
+						printer_close($ph);
+					} else {
+						$message .= "No se pudo conectar con la impresora.";
+					}
+				} catch(Exception $e1) {
+					$message .= $e1->getMessage();
+				}
+			}
+		} else {
+			$message = "La nota parece estar vacia.";
+		}
+		return $message;
 	}
 	
 	public function printTicket($numero = 0, $entregado, $cambio, $fechaCobro, $atendio = null, $impresora = 1) {
@@ -509,6 +789,7 @@ class Ticket {
 		return $message;
 	}
 	
+	/*
 	public function printTicket2($numero = 0, $entregado, $cambio, $fechaCobro, $atendio = null) {
 		
 		$message = "";
@@ -693,7 +974,7 @@ class Ticket {
 					$printer -> cut();
 					//$printer -> pulse();
 				} catch (Exception $e2) {
-					/* Images not supported on your PHP, or image file not found */
+					//Images not supported on your PHP, or image file not found
 					$message .= $printer->text($e2->getMessage() . "\n");
 				}
 				$printer -> close();
@@ -703,6 +984,7 @@ class Ticket {
 		}
 		return $message;
 	}
+	*/
 	
 	/* INICIA DECLARACION DE FUNCIONES AUXILIARES */
 	private function fixFieldSize($_data, $length = 9, $side = 'L', $car = ' ') {
