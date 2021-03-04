@@ -91,7 +91,7 @@
 						<div class="div-username-label" id="label<?=$_user->id?>"><?=$_user->alias?>
 						</div>
 						<div class="div-password-label">
-							<span class="ocultable" style="font-size:large">password:</span><img class="loading" type="password" src="http://seguridad.guanajuato.gob.mx/wp-content/uploads/2015/11/loading-gif.gif" style="width: 24px;padding: 5px;">
+							<span class="ocultable" style="font-size:large">password:</span><img class="loading" type="password" src="assets/images/loader.gif" style="width: 24px;padding: 5px;">
 							<br/>
 							<input id="input-pass-<?=$_user->id?>" class="input-pass ocultable" type="password" /><span class="loading" style="font-size:large">iniciando</span>
 						</div>
