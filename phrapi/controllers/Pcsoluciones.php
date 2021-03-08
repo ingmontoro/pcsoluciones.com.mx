@@ -281,6 +281,7 @@ class Pcsoluciones {
 					} else {
 						$message .= "Articulo " . $articulo->corta . " ( CODIGO: " . $articulo->codigo . " ) 'SIN STOCK'<br />";
 					}
+					//D($articulo);
 				}
 				$subtotal += $precio * $cantidad;
 			}
@@ -317,6 +318,7 @@ class Pcsoluciones {
 					$valores = explode( '||', $dato );
 					$valoresDetalle = array();
 					$valoresDetalle[":folio"] = $id;
+					//D($valores);
 					if (count($valores) > 2) {
 						//Items 'free'
 						$valoresDetalle[":claveArticulo"] = 'free';
@@ -330,8 +332,8 @@ class Pcsoluciones {
 						//Items de INVENTARIO
 						$valoresDetalle[":claveArticulo"] = $valores[0];
 						$valoresDetalle[":cantidad"] = $valores[1];
-						$valoresDetalle[":descripcion"] = '';
-						$valoresDetalle[":precio"] 	= '';
+						$valoresDetalle[":descripcion"] = null;
+						$valoresDetalle[":precio"] 	= null;
 					}
 					$this->db->query(
 						"INSERT INTO detalle_nota set folio = :folio, claveArticulo = :claveArticulo, descripcion = :descripcion, precio = :precio, cantidad = :cantidad",
@@ -426,6 +428,7 @@ class Pcsoluciones {
 						//generamos ticketData para devolver...
 						$ticket = new Ticket();
 						$datos = json_encode($ticket->dataTicket($id));
+						/* EL SISTEMA NUNCA IMPRIMIRA EN LOCAL, POR LO QUE LO COMENTAMOS
 						if(isset($data->imprimir) && $data->imprimir == 'true') {
 							//$message .= $this->printTicket($id, $data->entregado, $cambio, $datosCobro->fechaCobro);
 							
@@ -438,6 +441,7 @@ class Pcsoluciones {
 								$message .= " No se pudo imprimir el ticket: [{$result}]";
 							}
 						}
+						*/
 						$this->db->commit();
 					}
 				} else {
@@ -475,7 +479,7 @@ class Pcsoluciones {
 		return compact('code', 'id', 'message');
 	}
 	
-	public function printTicket() {
+	/*public function printTicket() {
 		$message = "Falta implementar la logica de guardado...";
 		$id = getValueFrom($_POST, 'numero', 0, FILTER_SANITIZE_PHRAPI_INT);
 		$code = 400;
@@ -496,7 +500,7 @@ class Pcsoluciones {
 		}
 		return compact('code', 'id', 'message');
 	}
-	
+	*/
 	public function cancelarNota() {
 	
 		$message = "Falta implementar la logica de guardado...";

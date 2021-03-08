@@ -608,6 +608,7 @@ class Ticket {
 		return $message;
 	}
 	
+	
 	public function printTicket($numero = 0, $entregado, $cambio, $fechaCobro, $atendio = null, $impresora = 1) {
 		$mode = "prod";
 		date_default_timezone_set("America/Mexico_City");

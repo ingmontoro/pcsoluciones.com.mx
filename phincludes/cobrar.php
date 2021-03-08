@@ -75,6 +75,7 @@ function cambio() {
 function printTicketR() {
 	
 	var url = 'phrapi/imprimir/remoteTicket';
+	url = 'http://127.0.0.1/sistema.tickets/phrapi/imprimir/remoteTicket';
 	var _request = $.post( url, { 
 		data: $("#ticketJson").val()
 	});
@@ -88,7 +89,7 @@ function printTicketR() {
 		alert("FAIL");
 	});	
 	
-	
+	/*
 	var entity = 'nota';
     var url = 'phrapi/imprimir/' + entity;
 	var _request = $.post(url, {numero: $('#numnota').val()}, 'json');
@@ -104,10 +105,10 @@ function printTicketR() {
 	});
 	_request.fail( function( jqXHR, textStatus ) {
 		configAlert(entity, 'danger', textStatus);
-	});
+	});*/
 }
  
-function printTicket() {
+/*function printTicket() {
 	var entity = 'nota';
     var url = 'phrapi/imprimir/' + entity;
 	var _request = $.post(url, {numero: $('#numnota').val()}, 'json');
@@ -124,7 +125,7 @@ function printTicket() {
 	_request.fail( function( jqXHR, textStatus ) {
 		configAlert(entity, 'danger', textStatus);
 	});
-}
+}*/
 /*
  * Registra el cobro de una nota
  */
@@ -168,7 +169,7 @@ function printTicket() {
 	});
 }
  
-function generarCobro(imprimir) {
+/*function generarCobro(imprimir) {
 	//Antes que nada guardamos la nota
 	if (hayCambios('cambios')) {
 		guardarNota();
@@ -198,7 +199,7 @@ function generarCobro(imprimir) {
 	_request.fail( function( jqXHR, textStatus ) {
 		configAlert('cobro', 'danger', textStatus);
 	});
-}
+}*/
 function cancelarConfirm() {
 	var modal = $("#confirm-modal").modal();
 	modal.find("#confirm-modal-title").html("Confirmaci&oacute;n cancelacion de nota");

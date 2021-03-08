@@ -125,9 +125,9 @@ hr{
 							<div style="float: right; display: inline-block; ">
 								<button id='boton_cancelar_nota' class="btn btn-danger" type="button" onclick="cancelarConfirm();">Cancelar Nota</button>
 								<button id='boton_cobrar_nota' class="btn btn-primary" type="button" onclick="cobrarTicket();">Cobrar</button>
-								<button id='boton_ver_ticket' class="btn btn-warning" type="button" onclick="showTicket1();">Ver ticket</button>
+								<!-- button id='boton_ver_ticket' class="btn btn-warning" type="button" onclick="showTicket1();">Ver ticket</button -->
 								<button id='boton_ver_ticket' class="btn btn-warning" type="button" onclick="showTicketR();">Ver ticket R</button>
-								<button id='boton_imprimir_ticket' class="btn btn-warning" type="button" onclick="printTicket(this);">Imprimir ticket</button>
+								<!-- button id='boton_imprimir_ticket' class="btn btn-warning" type="button" onclick="printTicket(this);">Imprimir ticket</button -->
 								<button id='boton_imprimir_ticket' class="btn btn-warning" type="button" onclick="printTicketR(this);">Imprimir ticket R</button>
 								<button id='boton_guardar_nota' class="btn btn-primary" type="button" onclick="guardarNota();">Guardar nota</button>
 								<button id="boton_limpiar_nota" class="btn btn-default" type="button" onclick="limpiarConfirm();">Limpiar Nota</button>
@@ -199,7 +199,7 @@ hr{
 	  </div>
       <div class="modal-footer" style="text-align:center;">
       	<button id="btn-cobrar" type="button" class="btn btn-primary" onclick="generarCobro(false);">Cobrar</button>
-      	<button id="btn-imprimir" type="button" class="btn btn-primary" onclick="generarCobro(true);">Cobrar e imprimir</button>
+      	<!-- button id="btn-imprimir" type="button" class="btn btn-primary" onclick="generarCobro(true);">Cobrar e imprimir</button -->
 		<button id="btn-imprimir" type="button" class="btn btn-primary" onclick="generarCobroR(true);">Cobrar e imprimir R</button>
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
       </div>
@@ -895,7 +895,7 @@ function createUniqueID() {
  		$("#cobro-modal").modal();
  	}
  }
- 	function showTicket1() {
+ 	/*function showTicket1() {
  	 	var numero = $('#numnota').val();
  		$("#numero-ticket1").html(numero);
  		//$("#detalle-ticket").load("phrapi/mostrar/ticket?numero=" + numero, function(){$("#ticket-modal").modal(); return "";});
@@ -913,9 +913,10 @@ function createUniqueID() {
  		       }
  			});
  		$("#ticket-modal").modal();
-	}
+	}*/
 	function showTicketR() {
  	 	var url = 'phrapi/mostrar/remoteTicket';
+		url = 'http://127.0.0.1/sistema.tickets/phrapi/mostrar/remoteTicket';
 		var _request = $.post( url, { 
 			data: $("#ticketJson").val()
 	    });
