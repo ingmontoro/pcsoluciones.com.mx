@@ -74,10 +74,9 @@ function cambio() {
  
 function printTicketR() {
 	
-	var url = 'phrapi/imprimir/remoteTicket';
-	url = 'http://127.0.0.1/sistema.tickets/phrapi/imprimir/remoteTicket';
+	var url = '<?=$config["printTicketRemoteAjax"]?>';
 	var _request = $.post( url, { 
-		data: $("#ticketJson").val()
+		data: $("#ticket").val()
 	});
 	
 	_request.done( function(response) {
@@ -150,11 +149,12 @@ function printTicketR() {
 			$('#statusNota').val(3);
 			//actualizamos datos del ticket par poder imprimir
 			if (response.datos != "") {
-				$("#ticketJson").val(response.datos);
+				$("#ticket").val(response.datos);
 			}
 			//intentamos imprimir
 			if(imprimir) {
-				printTicketR();
+				//printTicketR();
+				enviarImprimir();
 			}
 			bloquearCobro();
 			setBotones();
@@ -216,6 +216,7 @@ function cancelarNota(modal) {
     var url = 'phrapi/cancelar/' + entity;
 	var _request = $.post(url, {data: {json: datos}}, 'json');
 	_request.done(function(response) {
+		//validarSesion(entity, response);
 		response = JSON.parse(response);
 		var clase = '';
 		if (response.code == 200) {

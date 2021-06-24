@@ -523,26 +523,31 @@ class Pcsoluciones {
 					} else {
 						$valores = array(
 							":cc" => $cc,
-							":fechaCancelacion" => "CURRENT_TIMESTAMP",
+							//":fechaCancelacion" => "CURRENT_TIMESTAMP",
 							":idUsuario" => $this->session->logged,
 						);
-						//cancelamos cobro
-						$this->db->beginTransaction();
-						$this->db->query("UPDATE cobro SET fechaCancelacion = :fechaCancelacion, idUsuarioCancel = :idUsuario WHERE clave = :cc", $valores);
-						
-						//Actualizamos estatus de nota
-						$this->db->query("UPDATE nota SET estatus = 4 WHERE numero = {$id}");
-						
-						//Actualizamos stock, esto deberia ir en un procedimiento almacenado
-						$articulos = $this->db->queryAll("SELECT dn.claveArticulo, (a.cantidad + dn.cantidad) AS total FROM detalle_nota dn JOIN articulo a ON a.codigo = dn.claveArticulo WHERE dn.folio = {$id} AND dn.claveArticulo != 'free'");
-						if(count($articulos) > 0) {
-							foreach($articulos as $articulo) {
-								$this->db->query("UPDATE articulo SET cantidad = {$articulo->total} WHERE codigo = '{$articulo->claveArticulo}'");
+						try {
+							//cancelamos cobro
+							$this->db->beginTransaction();
+							$this->db->query("UPDATE cobro SET fechaCancelacion = CURRENT_TIMESTAMP, idUsuarioCancel = :idUsuario WHERE clave = :cc", $valores);
+							
+							//Actualizamos estatus de nota
+							$this->db->query("UPDATE nota SET estatus = 4 WHERE numero = {$id}");
+							
+							//Actualizamos stock, esto deberia ir en un procedimiento almacenado
+							$articulos = $this->db->queryAll("SELECT dn.claveArticulo, (a.cantidad + dn.cantidad) AS total FROM detalle_nota dn JOIN articulo a ON a.codigo = dn.claveArticulo WHERE dn.folio = {$id} AND dn.claveArticulo != 'free'");
+							if(count($articulos) > 0) {
+								foreach($articulos as $articulo) {
+									$this->db->query("UPDATE articulo SET cantidad = {$articulo->total} WHERE codigo = '{$articulo->claveArticulo}'");
+								}
 							}
+							$this->db->commit();
+							$message = "Nota cancelada correctamente.";
+							$code = 200;
+							
+						} catch (Exception $e) {
+							$message = $e->getMessage();
 						}
-						$this->db->commit();
-						$message = "Nota cancelada correctamente.";
-						$code = 200;
 					}
 				} else {
 					$message = "Id de nota invalido...";
@@ -882,6 +887,7 @@ class Pcsoluciones {
 		$idsec = getValueFrom($_GET, 'idsec', 0, FILTER_SANITIZE_PHRAPI_INT);
 		$entidad = getValueFrom($_GET, 'seccion', '', FILTER_SANITIZE_PHRAPI_MYSQL);
 		$tab = getValueFrom($_GET, 'tab', '', FILTER_SANITIZE_PHRAPI_MYSQL);
+		$tip = getValueFrom($_GET, 'tip', '', FILTER_SANITIZE_PHRAPI_MYSQL);
 		$datos = new stdClass();
 		if($entidad == 'articulos') {
 			if($id != '') {
@@ -974,6 +980,7 @@ class Pcsoluciones {
 			
 				$datosCliente = $this->buscarCliente($datos->orden->idCliente);
 			}
+			$datos->tip = $tip;
 			return compact('datos', 'id', 'idsec', 'datosCliente');
 		}
 	}

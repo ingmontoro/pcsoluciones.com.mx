@@ -1,4 +1,4 @@
-<?php header('Content-type: text/html; charset=iso-8859-1');?>
+<?php //header('Content-type: text/html; charset=iso-8859-1');?>
 <?php defined('PHRAPI') or die("Direct access not allowed!");
 use Mike42\Escpos\Printer;
 use Mike42\Escpos\EscposImage;
