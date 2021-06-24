@@ -244,11 +244,13 @@ var last_ = "";
  * Agrega una entrada abierta nueva a la nota de venta
  */
  function enviarMostrar() {
-	setupForm('<?=$config["showTicketRemote"]?>');
+	//setupForm('<?=$config["showTicketRemote"]?>');
+	setupForm('<?=$factory->Access->showTicketURL()?>');
 	$("#ticket_form").submit();
 }
 function enviarImprimir() {
-	setupForm('<?=$config["printTicketRemote"]?>');
+	//setupForm('<?=$config["printTicketRemote"]?>');
+	setupForm('<?=$factory->Access->printTicketURL()?>');
 	$("#ticket_form").submit();
 }
 function setupForm(accion) {

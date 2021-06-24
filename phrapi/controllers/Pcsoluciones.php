@@ -705,6 +705,23 @@ class Pcsoluciones {
 		return compact('code', 'id', 'message');
 	}
 	
+	public function guardarConfig() {
+		
+		$message = "Falta implementar la logica de guardado...";
+		$data = json_decode($_POST['data']['json']);
+		$code = 200;
+		$id = -1;
+		
+		$this->db->beginTransaction();
+		$this->db->query("UPDATE config SET valor = '{$data->mostrar}' WHERE llave = 'showTicketRemote'");
+		$this->db->query("UPDATE config SET valor = '{$data->imprimir}' WHERE llave = 'printTicketRemote'");
+		$message = "Datos actualizados correctamente";
+		$this->db->commit();
+		$this->session->showTicketURL = $data->mostrar;
+		$this->session->printTicketURL = $data->imprimir;
+		return compact('code', 'id', 'message');
+	}
+	
 	public function guardarUsuario() {
 		$message = "Falta implementar la logica de guardado...";
 		$data = json_decode($_POST['data']['json']);
@@ -909,6 +926,11 @@ class Pcsoluciones {
 				$datosUsuario = $this->buscarUsuario();
 			}
 			return compact('idUsuario', 'datosUsuario', 'tab');
+		}
+		if($entidad == 'config') {
+			$datosConfig;
+			$datosConfig = $this->buscarConfig();
+			return compact('datosConfig');
 		}
 		if($entidad == 'ordenes') {
 			$datosCliente;
@@ -1638,6 +1660,16 @@ class Pcsoluciones {
 		FROM usuario u
 		INNER JOIN persona p ON u.idpersona = p.id
 		WHERE u.id = '{$this->session->logged}'");
+		return $datos;
+	}
+	
+	private function buscarConfig() {
+		
+		$datos = new stdClass();
+		$res = $this->db->queryAll("SELECT llave, valor FROM config");
+		foreach($res as $reg) {
+			$datos->{$reg->llave} = $reg->valor;
+		}
 		return $datos;
 	}
 	

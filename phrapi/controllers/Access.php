@@ -28,6 +28,14 @@ class Access {
 		return $this->session->alias;
 	}
 	
+	public function showTicketURL() {
+		return $this->session->showTicketURL;
+	}
+	
+	public function printTicketURL() {
+		return $this->session->printTicketURL;
+	}
+	
 	public function logout() {
 		if (isset($this->session->logged)) {
 			unset($this->session->logged);
@@ -68,6 +76,8 @@ class Access {
 			array(
 				':login' => $user
 			));
+			$this->session->showTicketURL = $this->db->queryOne("SELECT valor FROM config WHERE llave = 'showTicketRemote'");
+			$this->session->printTicketURL = $this->db->queryOne("SELECT valor FROM config WHERE llave = 'printTicketRemote'");
 			return 200;
 		}
 		
