@@ -1,4 +1,4 @@
-<?php header( 'Content-type: text/html; charset=UTF-8' );?>
+﻿<?php header( 'Content-type: text/html; charset=UTF-8' );?>
 <?php defined('PHRAPI') or die("Direct access not allowed!");
 
 use Mike42\Escpos\Printer;
@@ -715,10 +715,12 @@ class Pcsoluciones {
 		$this->db->beginTransaction();
 		$this->db->query("UPDATE config SET valor = '{$data->mostrar}' WHERE llave = 'showTicketRemote'");
 		$this->db->query("UPDATE config SET valor = '{$data->imprimir}' WHERE llave = 'printTicketRemote'");
+		$this->db->query("UPDATE config SET valor = '{$data->myip}' WHERE llave = 'ip'");
+		$this->db->query("UPDATE config SET valor = '{$data->modolocal}' WHERE llave = 'modolocal'");
 		$message = "Datos actualizados correctamente";
 		$this->db->commit();
-		$this->session->showTicketURL = $data->mostrar;
-		$this->session->printTicketURL = $data->imprimir;
+		$this->session->showTicketURL = $this->db->queryOne("SELECT IF((SELECT valor FROM config WHERE llave = 'modolocal') = '1', CONCAT('http://127.0.0.1/', valor), CONCAT('http://', (SELECT valor FROM config WHERE llave = 'ip'), '/', valor)) as valor FROM config WHERE llave = 'showTicketRemote'");
+		$this->session->printTicketURL = $this->db->queryOne("SELECT IF((SELECT valor FROM config WHERE llave = 'modolocal') = '1', CONCAT('http://127.0.0.1/', valor), CONCAT('http://', (SELECT valor FROM config WHERE llave = 'ip'), '/', valor)) as valor FROM config WHERE llave = 'printTicketRemote'");
 		return compact('code', 'id', 'message');
 	}
 	
@@ -986,7 +988,7 @@ class Pcsoluciones {
 				$idsec = (int)$datos->folio;
 				$datos->aplicaiva = $datos->iva > 0 ? true : false;
 				//validamos que la nota este cobrada para enviar el json del ticket
-				if($datos->estatus == 3) {
+				if($datos->estatus == 3 || $datos->estatus == 2) {
 					$ticket = new Ticket();
 					$datos->dataTicket = json_encode($ticket->dataTicket($id));
 				}
@@ -1666,8 +1668,15 @@ class Pcsoluciones {
 	private function buscarConfig() {
 		
 		$datos = new stdClass();
-		$res = $this->db->queryAll("SELECT llave, valor FROM config");
+		/*$ip = $this->db->queryOne("SELECT valor FROM config WHERE llave = 'ip'");
+		$modolocal = $this->db->queryOne("SELECT valor FROM config WHERE llave = 'modolocal'");
+		if ($modolocal === "1") { $ip = "127.0.0.1"; }*/
+		//$res = $this->db->queryAll("SELECT llave, valor FROM config WHERE llave = 'showTicketRemote' or llave = 'printTicketRemote'");
+		$datos->ip = $this->db->queryOne("SELECT valor FROM config WHERE llave = 'ip'");
+		//$res = $this->db->queryAll("SELECT llave, IF((SELECT valor FROM config WHERE llave = 'modolocal') = '1', CONCAT('http://127.0.0.1/', valor), CONCAT('http://', (SELECT valor FROM config WHERE llave = 'ip'), '/', valor)) as valor FROM config WHERE llave = 'showTicketRemote' or llave = 'printTicketRemote'");
+		$res = $this->db->queryAll("SELECT llave, valor FROM config WHERE llave != 'ip'");
 		foreach($res as $reg) {
+			//$datos->{$reg->llave} = "http://" . $ip . "/" . $reg->valor;
 			$datos->{$reg->llave} = $reg->valor;
 		}
 		return $datos;

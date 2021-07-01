@@ -1,5 +1,6 @@
 <? require_once 'phincludes/util.php' ?>
 <? $datosConfig = $result['datosConfig']?>
+<? $ipEjemplo = $datosConfig->modolocal == '1' ? "127.0.0.1" : $datosConfig->ip ?>
 <style>
 #tabla-cliente>tbody>tr>td {
 	border: 2px solid #f2f2f2;
@@ -24,15 +25,29 @@ table>tbody>tr>td>div {
 		<br>
 		<div class="row has-feedback">
     		<div class="form-group col-md-4">
-      			<label for="nombrec">URL Mostrar Ticket</label>
-      			<input <?=htmlValConf("Nombre", '', true, "A", null, 3)?> value="<?=$datosConfig->showTicketRemote?>" class="form-control" id="mostrar" name="mostrar">
+      			<label for="">IP SERVIDOR:</label><br>
+      			<input <?=htmlValConf("IP MAQUINA SERVIDOR", '', true, "A", null, 3)?> value="<?=$datosConfig->ip?>" class="form-control" id="myip" name="myip">
+				<div><span>http://</span><span id="span_ip"><?=$datosConfig->ip?></span></div>
+      			<div class="help-block with-errors"></div>
+    		</div>
+  			<div class="form-group col-md-4">
+      			<label for="">Modo Sin Snternet (Sólo en maquina servidor)</label>
+      			<br>
+				<span>Activar Modo Local?&nbsp;</span>&nbsp;<input style="height:24px;width:24px;" type="checkbox" class="check" name="modolocal" id="modolocal" value="" <?=$datosConfig->modolocal == '1' ? "checked" : "" ?> />
       			<div class="help-block with-errors"></div>
     		</div>
   		</div>
-  		<div class="row">
+		<div class="row has-feedback">
     		<div class="form-group col-md-4">
-      			<label for="numerot">URL Imprimir Ticket</label>
-      			<input <?=htmlValConf("Login(usuario)", '', true, "A")?> value="<?=$datosConfig->printTicketRemote?>" class="form-control" id="imprimir" name="imprimir">
+      			<label for="nombrec">URL Mostrar Ticket</label>
+      			<input <?=htmlValConf("URL mostrar", '', true, "A", null, 3)?> value="<?=$datosConfig->showTicketRemote?>" class="form-control" id="mostrar" name="mostrar">
+				<div><span>http://</span><span id="span_ip"><?=$ipEjemplo?>/</span><span id="span_mostrar"><?=$datosConfig->showTicketRemote?></span></div>
+      			<div class="help-block with-errors"></div>
+    		</div>
+  			<div class="form-group col-md-4">
+      			<label for="">URL Imprimir Ticket</label>
+      			<input <?=htmlValConf("URL imprimir", '', true, "A")?> value="<?=$datosConfig->printTicketRemote?>" class="form-control" id="imprimir" name="imprimir">
+				<div><span>http://</span><span id="span_ip"><?=$ipEjemplo?>/</span><span id="span_imprimir"><?=$datosConfig->printTicketRemote?></span></div>
       			<div class="help-block with-errors"></div>
     		</div>
   		</div>
@@ -54,7 +69,9 @@ table>tbody>tr>td>div {
 function guardarUsuario() {
 	var datos = JSON.stringify({
 		mostrar: 	$('#mostrar').val(),
-        imprimir: 	$('#imprimir').val()
+        imprimir: 	$('#imprimir').val(),
+		modolocal: 	$('#modolocal').val(),
+		myip: 	$('#myip').val()
     });
     var entity = 'config';
     var url = 'phrapi/save/' + entity;
@@ -92,6 +109,13 @@ $("#my-alert-button").on("click", function(e) {
 $("#my2-alert-button").on("click", function(e) {
 	e.preventDefault();
 	$("#my2-alert").hide();
+});
+$("#modolocal").on("click", function(e) {
+	if($(this).is(":checked")) {
+		$(this).val(1);
+	} else {
+		$(this).val(0);
+	}
 });
 $(document).ready(function() {
 	$(".confirmar").hide();
