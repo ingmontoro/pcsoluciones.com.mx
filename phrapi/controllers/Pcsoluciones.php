@@ -1,4 +1,4 @@
-<?php header( 'Content-type: text/html; charset=UTF-8' );?>
+﻿<?php header( 'Content-type: text/html; charset=UTF-8' );?>
 <?php defined('PHRAPI') or die("Direct access not allowed!");
 
 use Mike42\Escpos\Printer;
@@ -281,6 +281,7 @@ class Pcsoluciones {
 					} else {
 						$message .= "Articulo " . $articulo->corta . " ( CODIGO: " . $articulo->codigo . " ) 'SIN STOCK'<br />";
 					}
+					//D($articulo);
 				}
 				$subtotal += $precio * $cantidad;
 			}
@@ -317,6 +318,7 @@ class Pcsoluciones {
 					$valores = explode( '||', $dato );
 					$valoresDetalle = array();
 					$valoresDetalle[":folio"] = $id;
+					//D($valores);
 					if (count($valores) > 2) {
 						//Items 'free'
 						$valoresDetalle[":claveArticulo"] = 'free';
@@ -330,8 +332,8 @@ class Pcsoluciones {
 						//Items de INVENTARIO
 						$valoresDetalle[":claveArticulo"] = $valores[0];
 						$valoresDetalle[":cantidad"] = $valores[1];
-						$valoresDetalle[":descripcion"] = '';
-						$valoresDetalle[":precio"] 	= '';
+						$valoresDetalle[":descripcion"] = null;
+						$valoresDetalle[":precio"] 	= null;
 					}
 					$this->db->query(
 						"INSERT INTO detalle_nota set folio = :folio, claveArticulo = :claveArticulo, descripcion = :descripcion, precio = :precio, cantidad = :cantidad",
@@ -426,6 +428,7 @@ class Pcsoluciones {
 						//generamos ticketData para devolver...
 						$ticket = new Ticket();
 						$datos = json_encode($ticket->dataTicket($id));
+						/* EL SISTEMA NUNCA IMPRIMIRA EN LOCAL, POR LO QUE LO COMENTAMOS
 						if(isset($data->imprimir) && $data->imprimir == 'true') {
 							//$message .= $this->printTicket($id, $data->entregado, $cambio, $datosCobro->fechaCobro);
 							
@@ -438,6 +441,7 @@ class Pcsoluciones {
 								$message .= " No se pudo imprimir el ticket: [{$result}]";
 							}
 						}
+						*/
 						$this->db->commit();
 					}
 				} else {
@@ -475,7 +479,7 @@ class Pcsoluciones {
 		return compact('code', 'id', 'message');
 	}
 	
-	public function printTicket() {
+	/*public function printTicket() {
 		$message = "Falta implementar la logica de guardado...";
 		$id = getValueFrom($_POST, 'numero', 0, FILTER_SANITIZE_PHRAPI_INT);
 		$code = 400;
@@ -496,7 +500,7 @@ class Pcsoluciones {
 		}
 		return compact('code', 'id', 'message');
 	}
-	
+	*/
 	public function cancelarNota() {
 	
 		$message = "Falta implementar la logica de guardado...";
@@ -519,26 +523,31 @@ class Pcsoluciones {
 					} else {
 						$valores = array(
 							":cc" => $cc,
-							":fechaCancelacion" => "CURRENT_TIMESTAMP",
+							//":fechaCancelacion" => "CURRENT_TIMESTAMP",
 							":idUsuario" => $this->session->logged,
 						);
-						//cancelamos cobro
-						$this->db->beginTransaction();
-						$this->db->query("UPDATE cobro SET fechaCancelacion = :fechaCancelacion, idUsuarioCancel = :idUsuario WHERE clave = :cc", $valores);
-						
-						//Actualizamos estatus de nota
-						$this->db->query("UPDATE nota SET estatus = 4 WHERE numero = {$id}");
-						
-						//Actualizamos stock, esto deberia ir en un procedimiento almacenado
-						$articulos = $this->db->queryAll("SELECT dn.claveArticulo, (a.cantidad + dn.cantidad) AS total FROM detalle_nota dn JOIN articulo a ON a.codigo = dn.claveArticulo WHERE dn.folio = {$id} AND dn.claveArticulo != 'free'");
-						if(count($articulos) > 0) {
-							foreach($articulos as $articulo) {
-								$this->db->query("UPDATE articulo SET cantidad = {$articulo->total} WHERE codigo = '{$articulo->claveArticulo}'");
+						try {
+							//cancelamos cobro
+							$this->db->beginTransaction();
+							$this->db->query("UPDATE cobro SET fechaCancelacion = CURRENT_TIMESTAMP, idUsuarioCancel = :idUsuario WHERE clave = :cc", $valores);
+							
+							//Actualizamos estatus de nota
+							$this->db->query("UPDATE nota SET estatus = 4 WHERE numero = {$id}");
+							
+							//Actualizamos stock, esto deberia ir en un procedimiento almacenado
+							$articulos = $this->db->queryAll("SELECT dn.claveArticulo, (a.cantidad + dn.cantidad) AS total FROM detalle_nota dn JOIN articulo a ON a.codigo = dn.claveArticulo WHERE dn.folio = {$id} AND dn.claveArticulo != 'free'");
+							if(count($articulos) > 0) {
+								foreach($articulos as $articulo) {
+									$this->db->query("UPDATE articulo SET cantidad = {$articulo->total} WHERE codigo = '{$articulo->claveArticulo}'");
+								}
 							}
+							$this->db->commit();
+							$message = "Nota cancelada correctamente.";
+							$code = 200;
+							
+						} catch (Exception $e) {
+							$message = $e->getMessage();
 						}
-						$this->db->commit();
-						$message = "Nota cancelada correctamente.";
-						$code = 200;
 					}
 				} else {
 					$message = "Id de nota invalido...";
@@ -693,6 +702,25 @@ class Pcsoluciones {
 			}
 			$message = "Orden guardada correctamente";
 		}
+		return compact('code', 'id', 'message');
+	}
+	
+	public function guardarConfig() {
+		
+		$message = "Falta implementar la logica de guardado...";
+		$data = json_decode($_POST['data']['json']);
+		$code = 200;
+		$id = -1;
+		
+		$this->db->beginTransaction();
+		$this->db->query("UPDATE config SET valor = '{$data->mostrar}' WHERE llave = 'showTicketRemote'");
+		$this->db->query("UPDATE config SET valor = '{$data->imprimir}' WHERE llave = 'printTicketRemote'");
+		$this->db->query("UPDATE config SET valor = '{$data->myip}' WHERE llave = 'ip'");
+		$this->db->query("UPDATE config SET valor = '{$data->modolocal}' WHERE llave = 'modolocal'");
+		$message = "Datos actualizados correctamente";
+		$this->db->commit();
+		$this->session->showTicketURL = $this->db->queryOne("SELECT IF((SELECT valor FROM config WHERE llave = 'modolocal') = '1', CONCAT('http://127.0.0.1/', valor), CONCAT('http://', (SELECT valor FROM config WHERE llave = 'ip'), '/', valor)) as valor FROM config WHERE llave = 'showTicketRemote'");
+		$this->session->printTicketURL = $this->db->queryOne("SELECT IF((SELECT valor FROM config WHERE llave = 'modolocal') = '1', CONCAT('http://127.0.0.1/', valor), CONCAT('http://', (SELECT valor FROM config WHERE llave = 'ip'), '/', valor)) as valor FROM config WHERE llave = 'printTicketRemote'");
 		return compact('code', 'id', 'message');
 	}
 	
@@ -878,6 +906,7 @@ class Pcsoluciones {
 		$idsec = getValueFrom($_GET, 'idsec', 0, FILTER_SANITIZE_PHRAPI_INT);
 		$entidad = getValueFrom($_GET, 'seccion', '', FILTER_SANITIZE_PHRAPI_MYSQL);
 		$tab = getValueFrom($_GET, 'tab', '', FILTER_SANITIZE_PHRAPI_MYSQL);
+		$tip = getValueFrom($_GET, 'tip', '', FILTER_SANITIZE_PHRAPI_MYSQL);
 		$datos = new stdClass();
 		if($entidad == 'articulos') {
 			if($id != '') {
@@ -899,6 +928,11 @@ class Pcsoluciones {
 				$datosUsuario = $this->buscarUsuario();
 			}
 			return compact('idUsuario', 'datosUsuario', 'tab');
+		}
+		if($entidad == 'config') {
+			$datosConfig;
+			$datosConfig = $this->buscarConfig();
+			return compact('datosConfig');
 		}
 		if($entidad == 'ordenes') {
 			$datosCliente;
@@ -954,7 +988,7 @@ class Pcsoluciones {
 				$idsec = (int)$datos->folio;
 				$datos->aplicaiva = $datos->iva > 0 ? true : false;
 				//validamos que la nota este cobrada para enviar el json del ticket
-				if($datos->estatus == 3) {
+				if($datos->estatus == 3 || $datos->estatus == 2) {
 					$ticket = new Ticket();
 					$datos->dataTicket = json_encode($ticket->dataTicket($id));
 				}
@@ -970,6 +1004,7 @@ class Pcsoluciones {
 			
 				$datosCliente = $this->buscarCliente($datos->orden->idCliente);
 			}
+			$datos->tip = $tip;
 			return compact('datos', 'id', 'idsec', 'datosCliente');
 		}
 	}
@@ -1627,6 +1662,23 @@ class Pcsoluciones {
 		FROM usuario u
 		INNER JOIN persona p ON u.idpersona = p.id
 		WHERE u.id = '{$this->session->logged}'");
+		return $datos;
+	}
+	
+	private function buscarConfig() {
+		
+		$datos = new stdClass();
+		/*$ip = $this->db->queryOne("SELECT valor FROM config WHERE llave = 'ip'");
+		$modolocal = $this->db->queryOne("SELECT valor FROM config WHERE llave = 'modolocal'");
+		if ($modolocal === "1") { $ip = "127.0.0.1"; }*/
+		//$res = $this->db->queryAll("SELECT llave, valor FROM config WHERE llave = 'showTicketRemote' or llave = 'printTicketRemote'");
+		$datos->ip = $this->db->queryOne("SELECT valor FROM config WHERE llave = 'ip'");
+		//$res = $this->db->queryAll("SELECT llave, IF((SELECT valor FROM config WHERE llave = 'modolocal') = '1', CONCAT('http://127.0.0.1/', valor), CONCAT('http://', (SELECT valor FROM config WHERE llave = 'ip'), '/', valor)) as valor FROM config WHERE llave = 'showTicketRemote' or llave = 'printTicketRemote'");
+		$res = $this->db->queryAll("SELECT llave, valor FROM config WHERE llave != 'ip'");
+		foreach($res as $reg) {
+			//$datos->{$reg->llave} = "http://" . $ip . "/" . $reg->valor;
+			$datos->{$reg->llave} = $reg->valor;
+		}
 		return $datos;
 	}
 	

@@ -74,9 +74,9 @@ function cambio() {
  
 function printTicketR() {
 	
-	var url = 'phrapi/imprimir/remoteTicket';
+	var url = '<?=$config["printTicketRemoteAjax"]?>';
 	var _request = $.post( url, { 
-		data: $("#ticketJson").val()
+		data: $("#ticket").val()
 	});
 	
 	_request.done( function(response) {
@@ -88,7 +88,7 @@ function printTicketR() {
 		alert("FAIL");
 	});	
 	
-	
+	/*
 	var entity = 'nota';
     var url = 'phrapi/imprimir/' + entity;
 	var _request = $.post(url, {numero: $('#numnota').val()}, 'json');
@@ -104,10 +104,10 @@ function printTicketR() {
 	});
 	_request.fail( function( jqXHR, textStatus ) {
 		configAlert(entity, 'danger', textStatus);
-	});
+	});*/
 }
  
-function printTicket() {
+/*function printTicket() {
 	var entity = 'nota';
     var url = 'phrapi/imprimir/' + entity;
 	var _request = $.post(url, {numero: $('#numnota').val()}, 'json');
@@ -124,7 +124,7 @@ function printTicket() {
 	_request.fail( function( jqXHR, textStatus ) {
 		configAlert(entity, 'danger', textStatus);
 	});
-}
+}*/
 /*
  * Registra el cobro de una nota
  */
@@ -149,11 +149,12 @@ function printTicket() {
 			$('#statusNota').val(3);
 			//actualizamos datos del ticket par poder imprimir
 			if (response.datos != "") {
-				$("#ticketJson").val(response.datos);
+				$("#ticket").val(response.datos);
 			}
 			//intentamos imprimir
 			if(imprimir) {
-				printTicketR();
+				//printTicketR();
+				enviarImprimir();
 			}
 			bloquearCobro();
 			setBotones();
@@ -168,7 +169,7 @@ function printTicket() {
 	});
 }
  
-function generarCobro(imprimir) {
+/*function generarCobro(imprimir) {
 	//Antes que nada guardamos la nota
 	if (hayCambios('cambios')) {
 		guardarNota();
@@ -198,7 +199,7 @@ function generarCobro(imprimir) {
 	_request.fail( function( jqXHR, textStatus ) {
 		configAlert('cobro', 'danger', textStatus);
 	});
-}
+}*/
 function cancelarConfirm() {
 	var modal = $("#confirm-modal").modal();
 	modal.find("#confirm-modal-title").html("Confirmaci&oacute;n cancelacion de nota");
@@ -215,6 +216,7 @@ function cancelarNota(modal) {
     var url = 'phrapi/cancelar/' + entity;
 	var _request = $.post(url, {data: {json: datos}}, 'json');
 	_request.done(function(response) {
+		//validarSesion(entity, response);
 		response = JSON.parse(response);
 		var clase = '';
 		if (response.code == 200) {

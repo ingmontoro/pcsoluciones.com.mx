@@ -1,4 +1,4 @@
-<?php header('Content-type: text/html; charset=iso-8859-1');?>
+<?php //header('Content-type: text/html; charset=iso-8859-1');?>
 <?php defined('PHRAPI') or die("Direct access not allowed!");
 use Mike42\Escpos\Printer;
 use Mike42\Escpos\EscposImage;
@@ -607,6 +607,7 @@ class Ticket {
 		}
 		return $message;
 	}
+	
 	
 	public function printTicket($numero = 0, $entregado, $cambio, $fechaCobro, $atendio = null, $impresora = 1) {
 		$mode = "prod";

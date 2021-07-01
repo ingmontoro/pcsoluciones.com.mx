@@ -91,6 +91,9 @@ hr{
 		</div>
 		<?endif;?>
 		<br>
+		<form action="" method="post" target="_blank" id="ticket_form" class="hidden">
+			<textarea style="text-align:left; width: 100%;resize: both;overflow: auto;" rows="7" id="ticket" name="data"><?=isset($datos->dataTicket) && $datos->dataTicket != "" ? $datos->dataTicket : ""?></textarea>
+		</form>
 		<form id="form-nota">
 		<div id="ticketPrevio"></div>
 		<div id="divCobrar"></div>
@@ -125,10 +128,12 @@ hr{
 							<div style="float: right; display: inline-block; ">
 								<button id='boton_cancelar_nota' class="btn btn-danger" type="button" onclick="cancelarConfirm();">Cancelar Nota</button>
 								<button id='boton_cobrar_nota' class="btn btn-primary" type="button" onclick="cobrarTicket();">Cobrar</button>
-								<button id='boton_ver_ticket' class="btn btn-warning" type="button" onclick="showTicket1();">Ver ticket</button>
-								<button id='boton_ver_ticket' class="btn btn-warning" type="button" onclick="showTicketR();">Ver ticket R</button>
-								<button id='boton_imprimir_ticket' class="btn btn-warning" type="button" onclick="printTicket(this);">Imprimir ticket</button>
-								<button id='boton_imprimir_ticket' class="btn btn-warning" type="button" onclick="printTicketR(this);">Imprimir ticket R</button>
+								<!--
+								<button id='boton_ver_ticket' class="btn btn-warning" type="button" onclick="showTicketR();">Ver ticket (AJAX)</button>
+								<button id='boton_imprimir_ticket' class="btn btn-warning" type="button" onclick="printTicketR(this);">Imprimir ticket (AJAX)</button>
+								-->
+								<button id='boton_ver_ticket' type="button" class="btn btn-warning" onclick="enviarMostrar();">Ver Ticket</button>
+								<button id='boton_imprimir_ticket' type="button" class="btn btn-warning" onclick="enviarImprimir();">Imprimir Ticket</button>
 								<button id='boton_guardar_nota' class="btn btn-primary" type="button" onclick="guardarNota();">Guardar nota</button>
 								<button id="boton_limpiar_nota" class="btn btn-default" type="button" onclick="limpiarConfirm();">Limpiar Nota</button>
 								<?if(isset($datos->orden->numero) && $datos->orden->numero != '' && $datos->orden->numero > 0 && $datos->estatus == 4):?>
@@ -163,9 +168,11 @@ hr{
 				</tr>
 			</table>
 		</div>
+		<!--
 		<div>
 			<textarea id="ticketJson"><?=isset($datos->dataTicket) && $datos->dataTicket != "" ? $datos->dataTicket : ""?></textarea>
 		</div>
+		-->
 	</form>
 </div>
 <!-- Button trigger modal -->
@@ -199,8 +206,9 @@ hr{
 	  </div>
       <div class="modal-footer" style="text-align:center;">
       	<button id="btn-cobrar" type="button" class="btn btn-primary" onclick="generarCobro(false);">Cobrar</button>
-      	<button id="btn-imprimir" type="button" class="btn btn-primary" onclick="generarCobro(true);">Cobrar e imprimir</button>
-		<button id="btn-imprimir" type="button" class="btn btn-primary" onclick="generarCobroR(true);">Cobrar e imprimir R</button>
+      	<!-- button id="btn-imprimir" type="button" class="btn btn-primary" onclick="generarCobro(true);">Cobrar e imprimir</button -->
+		<!-- <button id="btn-imprimir" type="button" class="btn btn-primary" onclick="generarCobroR(true);">Cobrar e imprimir R</button> -->
+		<button id="btn-imprimir" type="button" class="btn btn-primary" onclick="generarCobroR(true);">Cobrar e Imprimir</button>
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
       </div>
     </div>
@@ -235,6 +243,37 @@ var last_ = "";
 /*
  * Agrega una entrada abierta nueva a la nota de venta
  */
+ function enviarMostrar() {
+	//setupForm('<?=$config["showTicketRemote"]?>');
+	setupForm('<?=$factory->Access->showTicketURL()?>');
+	$("#ticket_form").submit();
+}
+function enviarImprimir() {
+	//setupForm('<?=$config["printTicketRemote"]?>');
+	setupForm('<?=$factory->Access->printTicketURL()?>');
+	$("#ticket_form").submit();
+}
+function setupForm(accion) {
+	$("#ticket_form").attr('action', accion);
+}
+function showTicketR() {
+	var url = '<?=$config["showTicketRemoteAjax"]?>';
+	var ticketData = $("#ticket").val();
+	if (ticketData.trim() == "") {
+		ticketData = $("#test").html();
+	}
+	
+	var _request = $.post(url, {data: ticketData});
+	_request.done( function(response) {
+		response = JSON.parse(response);
+		$("#detalle-ticket").html(response.datos.ticketHTML.replace('null', ''));
+		$("#ticket-modal").modal();
+	});
+	_request.fail( function( jqXHR, textStatus ) {
+		alert("FAIL");
+	});		
+}
+
 function addOpenDescItem() {
 	crearFila({codigo:'free', stock:99999}, 1);
 }
@@ -468,7 +507,8 @@ function guardarNota(estatus) {
 				if (response.code == 200) {
 					clase = "success";
 					if((numero == '' || numero == 0)&& response.id != '') {
-						window.location = "notas/" + response.id;
+						window.location = "notas/" + response.id + "?tip=Nota guardada correctamente.";
+						return;
 					} else {
 						setBotones();
 					}
@@ -895,40 +935,7 @@ function createUniqueID() {
  		$("#cobro-modal").modal();
  	}
  }
- 	function showTicket1() {
- 	 	var numero = $('#numnota').val();
- 		$("#numero-ticket1").html(numero);
- 		//$("#detalle-ticket").load("phrapi/mostrar/ticket?numero=" + numero, function(){$("#ticket-modal").modal(); return "";});
- 		var url = 'phrapi/mostrar/ticket';
- 		$.ajax({
- 			  type: "GET",
- 			  async: false,
- 			  url: url,
- 			  data: { numero: numero},
- 			  success: function(response) {
- 				 $("#detalle-ticket").html(response.replace('null', ''));
- 		       },
- 		       fail: function(response) {
- 		    	  $("#detalle-ticket").html(response);
- 		       }
- 			});
- 		$("#ticket-modal").modal();
-	}
-	function showTicketR() {
- 	 	var url = 'phrapi/mostrar/remoteTicket';
-		var _request = $.post( url, { 
-			data: $("#ticketJson").val()
-	    });
-		
-		_request.done( function(response) {
-			//validarSesion(entity, response);
-			$("#detalle-ticket").html(response.replace('null', ''));
-			$("#ticket-modal").modal();
-		});
-		_request.fail( function( jqXHR, textStatus ) {
-			alert("FAIL");
-		});		
-	}
+
  /*
   * Calcula importes y totales enl a nota de venta
   * NOTA: usa metodos que guardan datos en sesion los cuales se deben erradicar 
@@ -1070,5 +1077,8 @@ $(document).ready(function() {
 	$("#cobro-alert").hide();
 	formarNota();
 	setBotones();
+	<? if (isset($datos->tip) && $datos->tip != '') { ?>
+	configAlert("nota", "success", '<?=$datos->tip?>');
+	<? } ?>
 });
 </script>
