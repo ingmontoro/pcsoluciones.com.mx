@@ -1,0 +1,6 @@
+[01-Jul-2021 01:42:38 America/Mexico_City] PHP Fatal error:  Uncaught Error: Class 'PDF' not found in /home1/pcsoluc1/dev.sistema.pcsoluciones.com.mx/phrapi/controllers/Pcsoluciones.php:131
+Stack trace:
+#0 /home1/pcsoluc1/dev.sistema.pcsoluciones.com.mx/phrapi/framework/libs/Factory.php(48): Pcsoluciones->ordenPdf()
+#1 /home1/pcsoluc1/dev.sistema.pcsoluciones.com.mx/phrapi/index.php(69): Factory->__construct()
+#2 {main}
+  thrown in /home1/pcsoluc1/dev.sistema.pcsoluciones.com.mx/phrapi/controllers/Pcsoluciones.php on line 131

@@ -1069,7 +1069,7 @@ class Pcsoluciones {
 				join detalle_nota dn on n.numero = dn.folio
 				left join articulo a on a.codigo = dn.claveArticulo
 				where n.numero = $numero
-				and dn.claveArticulo != 'free') K ORDER BY k.codigo, k.descripcion");
+				and dn.claveArticulo != 'free') k ORDER BY k.codigo, k.descripcion");
 		return $data;
 	}*/
 	
