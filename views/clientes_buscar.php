@@ -51,7 +51,7 @@ var ibc = $("#nombre_cliente").typeahead({
          });
         return process(result);
     },
-    minLength: 4,
+    minLength: 6,
     autoSelect: false,
     afterSelect: function(item) {
         	if(item.id == -1) {

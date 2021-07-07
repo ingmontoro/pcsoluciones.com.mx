@@ -87,7 +87,7 @@ class Access {
 	public function loadUsers() {
 	
 		$usuarios = $this->db->queryAll("
-			SELECT id, login, alias, imagen, ajuste, profile, IF(imagen != '', IF(ajuste = 'alto', 'auto 300px', '300px'), '') tamano, posicion FROM usuario WHERE activo = 1 ORDER BY orden desc
+			SELECT id, login, alias, imagen, ajuste, profile, IF(imagen != '', IF(ajuste = 'alto', 'auto 300px', '300px'), imagen) tamano, posicion FROM usuario WHERE activo = 1 ORDER BY orden desc
 		");
 		return $usuarios;
 	}

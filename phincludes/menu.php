@@ -33,6 +33,10 @@ img.logo {
 .mi-menu>li>a {
 	color: #eb693c !important;
 }
+.navbar-default .navbar-nav>.open>a.tt, .navbar-default .navbar-nav>.open>a.tt:focus, .navbar-default .navbar-nav>.open>a.tt:hover {
+    color: #fff;
+    background-color: transparent;
+}
 </style>
 <nav id="menu" class="navbar navbar-default navbar-fixed-top">
 	<div class="container">
@@ -129,21 +133,25 @@ img.logo {
 				<li class="active_ dropdown">
 					<a href="#" class="dropdown-toggle"
 						data-toggle="dropdown" role="button" aria-haspopup="true"
-						aria-expanded="false" style="font-size:small;">Mi cuenta <span class="caret">
+						aria-expanded="false" style="font-size:small;">sistema<span class="caret"></span>
 					</a>
 					<ul class="dropdown-menu mi-menu">
-						<li><a class="click-loader" href="usuarios/editar" style="font-size:small;">editar mis datos</a></li>
-						<li><a class="click-loader" href="usuarios/editar?tab=password" style="font-size:small;">cambiar password</a></li>
-						<li role="separator" class="divider"></li>
 						<li><a class="click-loader" href="config/editar" style="font-size:small;">editar config</a></li>
 					</ul>
 				</li>
 				<li style="margin-right: 15px;">
-					<a style="padding: 10px;color: #337ab7;font-size: small;font-weight: 700;text-align:center;" href="phrapi/access/logout">
-						<?=$factory->Access->alias()?><br>
-						<i class="glyphicon glyphicon-off" style="font-size: x-large;color: tomato;"></i>
-						<br>Salir
+					<a style="padding: 10px; padding-bottom:0; color: #337ab7;font-size: small;font-weight: 700;text-align:center;"
+					href="#" class="dropdown-toggle tt"
+					data-toggle="dropdown" role="button" aria-haspopup="true"
+					aria-expanded="false"><?=$factory->Access->alias()?><span class="caret"></span>
+						<div><img src="https://images-na.ssl-images-amazon.com/images/I/81LyLwhZeBL.png" style="max-width:32px; border-radius:20px;" /></div>
 					</a>
+					<ul class="dropdown-menu mi-menu">
+						<li><a class="click-loader" href="usuarios/editar" style="font-size:small;">editar mis datos</a></li>
+						<li><a class="click-loader" href="usuarios/editar?tab=password" style="font-size:small;">cambiar password</a></li>
+						<li role="separator" class="divider" style="margin: 4px 0"></li>
+						<li><a class="click-loader" href="phrapi/access/logout" style="font-size:small;">Salir</a></li>
+					</ul>
 				</li>
 				<!-- <li><a href="../navbar/">Default</a></li>
 				<li><a href="../navbar-static-top/">Static top</a></li>

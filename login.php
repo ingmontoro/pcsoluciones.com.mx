@@ -80,7 +80,7 @@
 			<?if (isset( $_users) && count ($_users) > 0):?>
 				<?foreach ($_users as $_user):?>
 				<? //$style = "background-image:url('" . ($_user->imagen == '' ? 'assets/images/icon-user-default.png' :$GLOBALS['config']['user_image_path'] . "/" . $_user->imagen) . "'); background-size:$_user->tamano; background-position:$_user->posicion;"; ?>
-				<? $style = $_user->imagen == '' ? '' : "background-image:url('" . $GLOBALS['config']['user_image_path'] . "/" . $_user->imagen . "'); background-size:$_user->tamano; background-position:$_user->posicion;"; ?>
+				<? $style = $_user->imagen == '' ? '' : "background-image:url('" . $_user->imagen . "'); background-size:$_user->tamano; background-position:$_user->posicion;"; ?>
 				<? $class = "profile $_user->profile"; ?>
 					<div class="cell-user">
 						<div class="cell-user-img <?=$class?>"
