@@ -1010,7 +1010,7 @@ class Pcsoluciones {
 	}
 	
 	private function esHoraLaboral() {
-		$now = new Datetime("now");
+		/*$now = new Datetime("now");
 		$begintime = new DateTime('09:30');
 		$endtime = new DateTime('21:30');
 		if(($this->session->logged != 3 && $this->session->logged != 10)) {
@@ -1023,6 +1023,10 @@ class Pcsoluciones {
 				//echo "nay";
 				return false;
 			}
+		}
+		return true;*/
+		if($this->session->logged != 10 && $this->session->logged != 3 && !Access::esHoraLaboral()) {
+			return false;
 		}
 		return true;
 	}

@@ -110,6 +110,16 @@ div.divUserName {
 	/*background-size: 925px;*/
 }
 
+.profilef {
+	background-image: url('../images/profilesf.jpg');
+	/*background-size: 925px;*/
+}
+
+.profile_thumbs {
+	background-image: url('../images/profilesnt.jpg');
+	/*background-size: 925px;*/
+}
+
 .profile1 {
 	background-position-x: left;
 	background-position-y: top;

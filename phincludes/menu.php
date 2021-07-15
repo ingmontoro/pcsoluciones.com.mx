@@ -33,6 +33,10 @@ img.logo {
 .mi-menu>li>a {
 	color: #eb693c !important;
 }
+.mi-menu>li>a.salir {
+	color: #337ab7 !important;
+	font-weight : bold;
+}
 .navbar-default .navbar-nav>.open>a.tt, .navbar-default .navbar-nav>.open>a.tt:focus, .navbar-default .navbar-nav>.open>a.tt:hover {
     color: #fff;
     background-color: transparent;
@@ -144,13 +148,13 @@ img.logo {
 					href="#" class="dropdown-toggle tt"
 					data-toggle="dropdown" role="button" aria-haspopup="true"
 					aria-expanded="false"><?=$factory->Access->alias()?><span class="caret"></span>
-						<div><img src="https://images-na.ssl-images-amazon.com/images/I/81LyLwhZeBL.png" style="max-width:32px; border-radius:20px;" /></div>
+						<div><img <?=$factory->Access->imagen() != '' ? 'src="' . $factory->Access->imagen() . '"' : ''?> style="height:32px;width:32px; border-radius:20px;" class="profile_thumbs <?=$factory->Access->profile()?>" /></div>
 					</a>
 					<ul class="dropdown-menu mi-menu">
 						<li><a class="click-loader" href="usuarios/editar" style="font-size:small;">editar mis datos</a></li>
 						<li><a class="click-loader" href="usuarios/editar?tab=password" style="font-size:small;">cambiar password</a></li>
 						<li role="separator" class="divider" style="margin: 4px 0"></li>
-						<li><a class="click-loader" href="phrapi/access/logout" style="font-size:small;">Salir</a></li>
+						<li><a class="click-loader salir" href="phrapi/access/logout" style="font-size:small;">Salir <i class="glyphicon glyphicon-off" style="float: right;color: tomato;font-size:medium;"></i></a></li>
 					</ul>
 				</li>
 				<!-- <li><a href="../navbar/">Default</a></li>

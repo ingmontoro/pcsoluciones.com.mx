@@ -26,6 +26,7 @@
     <!-- Bootstrap core CSS -->
     <!-- Bootstrap CSS -->
 	<!-- link href="//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet" -->
+	<link rel="stylesheet" type="text/css" href="assets/css/login.css?v=00000.1">
 	<link href="assets/css/bootstrap.min.css?v=1.0001" rel="stylesheet">
     <!-- Site CSS -->
     <link href="assets/css/custom.css?v=00000000003211" rel="stylesheet">

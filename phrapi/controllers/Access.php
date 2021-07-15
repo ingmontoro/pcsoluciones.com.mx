@@ -15,6 +15,24 @@ class Access {
 		$this->db = DB::getInstance();
 		$this->session = Session::getInstance();
 	}
+	
+	public static function esHoraLaboral() {
+		$now = new Datetime("now");
+		$begintime = new DateTime('09:30');
+		$endtime = new DateTime('20:30');
+		//if(($this->session->logged != 1 && $this->session->logged != 3)) {
+			if($now >= $begintime && $now <= $endtime){
+				// between times
+				//echo "yay";
+				return true;
+			} else {
+				// not between times
+				//echo "nay";
+				return false;
+			}
+		//}
+		//return true;
+	}
 
 	public function is_logged() {
 		return isset($this->session->logged);
@@ -26,6 +44,14 @@ class Access {
 	
 	public function alias() {
 		return $this->session->alias;
+	}
+	
+	public function profile() {
+		return $this->session->profile;
+	}
+	
+	public function imagen() {
+		return $this->session->imagen;
 	}
 	
 	public function showTicketURL() {
@@ -76,6 +102,20 @@ class Access {
 			array(
 				':login' => $user
 			));
+			$this->session->profile = $this->db->queryOne("
+			SELECT profile
+			FROM usuario
+			WHERE login = :login and activo = 1",
+			array(
+				':login' => $user
+			));
+			$this->session->imagen = $this->db->queryOne("
+			SELECT imagen
+			FROM usuario
+			WHERE login = :login and activo = 1",
+			array(
+				':login' => $user
+			));
 			$this->session->showTicketURL = $this->db->queryOne("SELECT IF((SELECT valor FROM config WHERE llave = 'modolocal') = '1', CONCAT('http://127.0.0.1/', valor), CONCAT('http://', (SELECT valor FROM config WHERE llave = 'ip'), '/', valor)) as valor FROM config WHERE llave = 'showTicketRemote'");
 			$this->session->printTicketURL = $this->db->queryOne("SELECT IF((SELECT valor FROM config WHERE llave = 'modolocal') = '1', CONCAT('http://127.0.0.1/', valor), CONCAT('http://', (SELECT valor FROM config WHERE llave = 'ip'), '/', valor)) as valor FROM config WHERE llave = 'printTicketRemote'");
 			return 200;
@@ -89,6 +129,16 @@ class Access {
 		$usuarios = $this->db->queryAll("
 			SELECT id, login, alias, imagen, ajuste, profile, IF(imagen != '', IF(ajuste = 'alto', 'auto 300px', '300px'), imagen) tamano, posicion FROM usuario WHERE activo = 1 ORDER BY orden desc
 		");
+		
+		foreach ($usuarios as $usuario) {
+			$usuario->estilo = $usuario->imagen == '' ? '' : "background-image:url('assets/images/" . $usuario->imagen . "'); background-size:" . $usuario->tamano . "; background-position:" . $usuario->posicion . ";";
+			$usuario->clase = "profile " . $usuario->profile;
+			if ($usuario->id != 10 && $usuario->id != 3 && !$this->esHoraLaboral()) {
+				$usuario->estilo = "";
+				$usuario->clase = "profilef " . $usuario->profile;
+				$usuario->alias = "ZzZzZz...";
+			}
+		}
 		return $usuarios;
 	}
 	
