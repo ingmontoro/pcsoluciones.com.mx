@@ -1,0 +1,25 @@
+<IfModule mod_rewrite.c>
+	### Mod Rewrite Start
+	Options +FollowSymLinks
+	RewriteEngine On
+	#RewriteBase /
+	RewriteBase /edsa-sistema-pcsoluciones/
+
+	# regla para modo corto
+	#RewriteRule ^([-a-z]+/?)+$/(\d+)$ index.php?seccion=$1&accion=editar&id=$2 [L,QSA,NC]
+	#RewriteRule nota/add index.php?seccion=notas&accion=editar&id=0&ent=nota [L,QSA,NC]
+	#RewriteRule clientes/add index.php?seccion=clientes&accion=editar&id=0&ent=cliente [L,QSA,NC]
+	#RewriteRule ^nota/(\d+)$ index.php?seccion=notas&accion=editar&id=$1&ent=nota [L,QSA,NC]
+	#RewriteRule ^notas$ index.php?seccion=notas&accion=index [L,QSA,NC]
+	#RewriteRule ^ordenes$ index.php?seccion=ordenes&accion=index [L,QSA,NC]
+	#RewriteRule ^orden/(\d+)$ index.php?seccion=ordenes&accion=editar&id=$1&ent=orden [L,QSA,NC]
+	#RewriteRule orden/add index.php?seccion=ordenes&accion=editar&id=0&ent=orden [L,QSA,NC]
+	RewriteRule ^([a-z]+)$ index.php?seccion=$1&accion=index [L,QSA,NC]
+	RewriteRule ^notas/add/(\d+)$ index.php?seccion=notas&accion=editar&idsec=$1&ent=nota [L,QSA,NC]
+	RewriteRule ([a-z]+)/add index.php?seccion=$1&accion=editar&id=0 [L,QSA,NC]
+	RewriteRule ^buscar/([a-z]+)$ index.php?seccion=$1&accion=buscar [L,QSA,NC]
+	RewriteRule ^buscar/([a-z]+)/(\d+)$ index.php?seccion=$1&accion=buscar&id=$2 [L,QSA,NC]
+	RewriteRule ^ajaxsearch/([a-z]+)$ ajaxloader.php?seccion=$1 [L,QSA,NC]
+	RewriteRule ([a-z]+)/([a-z0-9]+)/([A-Z0-9]+)$ index.php?seccion=$1&accion=editar&id=$2&idMov=$3 [L,QSA,NC]
+	#RewriteRule ([a-z]+)/([a-z0-9]+)$ index.php?seccion=$1&accion=editar&id=$2 [L,QSA,NC]
+</IfModule>
