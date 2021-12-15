@@ -137,10 +137,10 @@ img.logo {
 				<li class="active_ dropdown">
 					<a href="#" class="dropdown-toggle"
 						data-toggle="dropdown" role="button" aria-haspopup="true"
-						aria-expanded="false" style="font-size:small;">sistema<span class="caret"></span>
+						aria-expanded="false" style="font-size:small;">Sistema<span class="caret"></span>
 					</a>
 					<ul class="dropdown-menu mi-menu">
-						<li><a class="click-loader" href="config/editar" style="font-size:small;">editar config</a></li>
+						<li><a class="click-loader" href="config/editar" style="font-size:small;">Editar config</a></li>
 					</ul>
 				</li>
 				<li style="margin-right: 15px;">
@@ -151,8 +151,8 @@ img.logo {
 						<div><img <?=$factory->Access->imagen() != '' ? 'src="' . $factory->Access->imagen() . '"' : ''?> style="height:32px;width:32px; border-radius:20px;" class="profile_thumbs <?=$factory->Access->profile()?>" /></div>
 					</a>
 					<ul class="dropdown-menu mi-menu">
-						<li><a class="click-loader" href="usuarios/editar" style="font-size:small;">editar mis datos</a></li>
-						<li><a class="click-loader" href="usuarios/editar?tab=password" style="font-size:small;">cambiar password</a></li>
+						<li><a class="click-loader" href="usuarios/editar" style="font-size:small;">Editar mis datos</a></li>
+						<li><a class="click-loader" href="usuarios/editar?tab=password" style="font-size:small;">Cambiar password</a></li>
 						<li role="separator" class="divider" style="margin: 4px 0"></li>
 						<li><a class="click-loader salir" href="phrapi/access/logout" style="font-size:small;">Salir <i class="glyphicon glyphicon-off" style="float: right;color: tomato;font-size:medium;"></i></a></li>
 					</ul>
