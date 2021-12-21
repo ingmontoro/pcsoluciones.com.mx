@@ -205,7 +205,7 @@ hr{
 		  <div id="mensaje"></div>
 	  </div>
       <div class="modal-footer" style="text-align:center;">
-      	<button id="btn-cobrar" type="button" class="btn btn-primary" onclick="generarCobro(false);">Cobrar</button>
+      	<button id="btn-cobrar" type="button" class="btn btn-primary" onclick="generarCobroR(false);">Cobrar</button>
       	<!-- button id="btn-imprimir" type="button" class="btn btn-primary" onclick="generarCobro(true);">Cobrar e imprimir</button -->
 		<!-- <button id="btn-imprimir" type="button" class="btn btn-primary" onclick="generarCobroR(true);">Cobrar e imprimir R</button> -->
 		<button id="btn-imprimir" type="button" class="btn btn-primary" onclick="generarCobroR(true);">Cobrar e Imprimir</button>

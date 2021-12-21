@@ -41,6 +41,9 @@ img.logo {
     color: #fff;
     background-color: transparent;
 }
+.navbar-fixed-bottom .navbar-collapse, .navbar-fixed-top .navbar-collapse {
+    max-height: 500px;
+}
 </style>
 <nav id="menu" class="navbar navbar-default navbar-fixed-top">
 	<div class="container">
