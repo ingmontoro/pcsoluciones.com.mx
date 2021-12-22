@@ -1578,7 +1578,14 @@ class Pcsoluciones {
 		
 		$tipo = getValueFrom($_POST, 'tipo', '', FILTER_SANITIZE_PHRAPI_MYSQL);
 		$cadena = getValueFrom($_POST, 'query', '', FILTER_SANITIZE_PHRAPI_MYSQL);
-		$result = $this->db->queryAll(
+
+		$unwanted_array = array(    'Š'=>'S', 'š'=>'s', 'Ž'=>'Z', 'ž'=>'z', 'À'=>'A', 'Á'=>'A', 'Â'=>'A', 'Ã'=>'A', 'Ä'=>'A', 'Å'=>'A', 'Æ'=>'A', 'Ç'=>'C', 'È'=>'E', 'É'=>'E',
+                            'Ê'=>'E', 'Ë'=>'E', 'Ì'=>'I', 'Í'=>'I', 'Î'=>'I', 'Ï'=>'I', 'Ñ'=>'N', 'Ò'=>'O', 'Ó'=>'O', 'Ô'=>'O', 'Õ'=>'O', 'Ö'=>'O', 'Ø'=>'O', 'Ù'=>'U',
+                            'Ú'=>'U', 'Û'=>'U', 'Ü'=>'U', 'Ý'=>'Y', 'Þ'=>'B', 'ß'=>'Ss', 'à'=>'a', 'á'=>'a', 'â'=>'a', 'ã'=>'a', 'ä'=>'a', 'å'=>'a', 'æ'=>'a', 'ç'=>'c',
+                            'è'=>'e', 'é'=>'e', 'ê'=>'e', 'ë'=>'e', 'ì'=>'i', 'í'=>'i', 'î'=>'i', 'ï'=>'i', 'ð'=>'o', 'ñ'=>'n', 'ò'=>'o', 'ó'=>'o', 'ô'=>'o', 'õ'=>'o',
+                            'ö'=>'o', 'ø'=>'o', 'ù'=>'u', 'ú'=>'u', 'û'=>'u', 'ý'=>'y', 'þ'=>'b', 'ÿ'=>'y' );
+		
+							$result = $this->db->queryAll(
 			"SELECT * FROM (SELECT DISTINCT c.id,
 			CONCAT (LOWER(c.Nombre), ' ', LOWER(c.apellido1), ' ', LOWER((CASE WHEN c.apellido2 is null THEN '' ELSE c.apellido2 END)),
 					LOWER((CASE WHEN (c.nombre_fiscal = '' OR c.nombre_fiscal IS NULL)THEN '' ELSE CONCAT(' / ' ,c.nombre_fiscal) END)),
@@ -1586,6 +1593,11 @@ class Pcsoluciones {
 					(CASE WHEN t.numero is null OR t.numero = '' THEN '' ELSE CONCAT(' / ' ,t.numero) END)
 				) nombre
 			FROM cliente c left join cliente_telefono ct on c.id = ct.idCliente left join telefono t on t.clave = ct.claveTelefono) r order by r.nombre");
+
+		foreach ($result as $fila) {
+			$fila->nombre = strtr($fila->nombre, $unwanted_array);
+		}
+
 		return json_encode($result, JSON_UNESCAPED_UNICODE);
 		//return $result;
 	}

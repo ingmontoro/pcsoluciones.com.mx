@@ -202,14 +202,25 @@ var normalize = function (input) {
 var $ibc = $("#nombre_cliente").typeahead({
 	/*highlighter: function(item){
 		var string_norm = item.normalize('NFD').replace(/[\u0300-\u036f]/g, "");
-		string_norm = "<div>" + string_norm + "</div>";
+		this.query = this.query.normalize('NFD').replace(/[\u0300-\u036f]/g, "");
+		//string_norm = "<div>" + string_norm + "</div>";
 		var myRegex = "" + this.query + "";
-		console.log(myRegex);
+		//console.log(string_norm);
 		var re = new RegExp(myRegex, "gi");
-		//string_norm = string_norm.replaceAll(this.query, "<span style='font-weight:600;'>" + this.query + "</span>");
-		string_norm = string_norm.replaceAll(this.query, "XXX" + this.query + "XXX");
-		return string_norm;
+		string_norm = string_norm.replaceAll(this.query, "<span style='font-weight:600;'>" + this.query + "</span>");
+		//string_norm = string_norm.replaceAll(this.query, "XXX" + this.query + "XXX");
+		//return string_norm;
+		return "<div>" + string_norm + "</div>";
     },*/
+	highlighter: function(item){
+		var string_norm = item.normalize('NFD').replace(/[\u0300-\u036f]/g, "");
+		this.query = this.query.normalize('NFD').replace(/[\u0300-\u036f]/g, "");
+		var myRegex = "" + this.query + "";
+		var re = new RegExp(myRegex, "gi");
+		var indice = string_norm.toLowerCase().indexOf(this.query.toLowerCase());
+		string_norm = string_norm.replace(re, "<span style='font-weight:600;'>" + string_norm.substring(indice, indice + this.query.length) + "</span>");
+		return "<div>" + string_norm + "</div>";
+    },
     source: <?=$clientes?>,
     minLength: 3,
     autoSelect: true,

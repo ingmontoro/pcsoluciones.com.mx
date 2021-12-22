@@ -42,21 +42,36 @@ var ibc = $("#nombre_cliente").typeahead({
     autoSelect: true,
 	items: 15,
 	selectOnBlur: false,
+	changeInputOnSelect: true,
+	changeInputOnMove: true,
     afterSelect: function(item) {
-        	if(item.id == -1) {
-            	$("#div_cliente").show();
-            	$("#div_busqueda").hide();
-        	} else {
-        		//window.location = 'clientes/' + item.id;
-        		$("#nombre_cliente").val(_txt);
-        		cargarCliente(item.id);
-        		$("#div_busqueda").show();
-        	}
-        },
+		if(item.id == -1) {
+			$("#div_cliente").show();
+			$("#div_busqueda").hide();
+		} else {
+			//window.location = 'clientes/' + item.id;
+			$("#nombre_cliente").val(_txt);
+			cargarCliente(item.id);
+			$("#div_busqueda").show();
+		}
+	},
     displayText: function(item) {
         return item.nombre;
     },
-    //addItem: {id: -1, nombre: "¿No encuentra el cliente? Agregar Nuevo"}
+	highlighter: function(item){
+		var string_norm = item.normalize('NFD').replace(/[\u0300-\u036f]/g, "");
+		this.query = this.query.normalize('NFD').replace(/[\u0300-\u036f]/g, "");
+		var myRegex = "" + this.query + "";
+		var re = new RegExp(myRegex, "gi");
+		var indice = string_norm.toLowerCase().indexOf(this.query.toLowerCase());
+		string_norm = string_norm.replace(re, "<span style='font-weight:600;'>" + string_norm.substring(indice, indice + this.query.length) + "</span>");
+		return "<div>" + string_norm + "</div>";
+    },
+    matcher: function(item) {
+		var normalizedQuery = this.query.normalize('NFD').replace(/[\u0300-\u036f]/g, "");
+		var normalizedNombre = item.nombre.normalize('NFD').replace(/[\u0300-\u036f]/g, "");;
+		if(this.query.length) return ~normalizedNombre.toLowerCase().indexOf(normalizedQuery.toLowerCase());
+	}
 });
 ibc.on("click", function() {ibc.typeahead("lookup");})
 function cargarCliente(numcli) {
