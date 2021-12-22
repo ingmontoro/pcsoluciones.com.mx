@@ -168,7 +168,7 @@ class Pcsoluciones {
 			//Etiqueta
 			$pdf->SetFont('Arial','',12);
 			$pdf->SetXY( 175, 10 );
-			$pdf->Cell(35, 3, "Número de orden", 0, null, "C" );
+			$pdf->Cell(35, 3, "Nï¿½mero de orden", 0, null, "C" );
 			//Dato
 			$pdf->SetXY( 175, 14 );
 			$pdf->SetFont('Arial','',11);
@@ -194,12 +194,12 @@ class Pcsoluciones {
 			$_yposs += $_yoffset;
 			//Dato
 			$pdf->SetXY( 8, $_yposs - 3);
-			$pdf->Cell(200, 5, "Dirección: " . ucwords( $filaDatos->domicilio != '' ? $filaDatos->domicilio : ' -  -  -  -  -  -  -  -  -  - ' ), '0', null, "L" );
+			$pdf->Cell(200, 5, "Direcciï¿½n: " . ucwords( $filaDatos->domicilio != '' ? $filaDatos->domicilio : ' -  -  -  -  -  -  -  -  -  - ' ), '0', null, "L" );
 			
 			//DETALLE-ORDEN 1
 			$pdf->SetXY( 8, 58 );
 			$pdf->SetFont('Arial','', 12);
-			$pdf->Cell(200, 5, "Descripción del equipo y/o servicio:", '0', null, "L" );
+			$pdf->Cell(200, 5, "Descripciï¿½n del equipo y/o servicio:", '0', null, "L" );
 			//$pdf->Rect(7, 63, 202, 52, 'B');
 			$pdf->RoundedRect(7, 63, 202, 52, 2, '1234', 'DF');
 			$pdf->SetXY( 8, 66 );
@@ -210,7 +210,7 @@ class Pcsoluciones {
 			$pdf->SetFont('Arial','', 9);
 			//$pdf->Rect(7, 115, 202, 20, 'B');
 			$pdf->SetXY( 8, 116 );
-			$pdf->MultiCell(200, 3, "Después de 15 dias de recibido el equipo se cobrará almacenaje(por día excedido). Después de 90 dias NO nos harémos responsables por el equipo. Para hacer válida la entrega, garantía o cualquier aclaración, es INDISPENSABLE presentar este comprobante.", 0, 'C');
+			$pdf->MultiCell(200, 3, "Despuï¿½s de 15 dias de recibido el equipo se cobrarï¿½ almacenaje(por dï¿½a excedido). Despuï¿½s de 90 dias NO nos harï¿½mos responsables por el equipo. Para hacer vï¿½lida la entrega, garantï¿½a o cualquier aclaraciï¿½n, es INDISPENSABLE presentar este comprobante.", 0, 'C');
 			$pdf->SetXY( 80, 130 );
 			$pdf->SetFont('Arial','', 10);
 			$pdf->Cell(60, 5, "Firma de conformidad cliente", 'T', null, "C" );
@@ -950,8 +950,11 @@ class Pcsoluciones {
 				} else {
 					$id = 0; 
 				}
+			} else {
+				
 			}
-			return compact('datos', 'id', 'datosCliente');
+			$clientes = $this->typeaheadAll();
+			return compact('datos', 'id', 'datosCliente', 'clientes');
 		}
 		if($entidad == 'notas') {
 			$datos = new stdClass();
@@ -1569,6 +1572,22 @@ class Pcsoluciones {
 				$cadena . "%' OR UPPER(descripcion) LIKE '%" .
 				$cadena . "%') AND activo = 1");
 		return $result;
+	}
+
+	public function typeaheadAll() {
+		
+		$tipo = getValueFrom($_POST, 'tipo', '', FILTER_SANITIZE_PHRAPI_MYSQL);
+		$cadena = getValueFrom($_POST, 'query', '', FILTER_SANITIZE_PHRAPI_MYSQL);
+		$result = $this->db->queryAll(
+			"SELECT * FROM (SELECT DISTINCT c.id,
+			CONCAT (LOWER(c.Nombre), ' ', LOWER(c.apellido1), ' ', LOWER((CASE WHEN c.apellido2 is null THEN '' ELSE c.apellido2 END)),
+					LOWER((CASE WHEN (c.nombre_fiscal = '' OR c.nombre_fiscal IS NULL)THEN '' ELSE CONCAT(' / ' ,c.nombre_fiscal) END)),
+					UPPER((CASE WHEN c.rfc is null OR c.rfc = '' THEN '' ELSE CONCAT(' / ' ,c.rfc) END)),
+					(CASE WHEN t.numero is null OR t.numero = '' THEN '' ELSE CONCAT(' / ' ,t.numero) END)
+				) nombre
+			FROM cliente c left join cliente_telefono ct on c.id = ct.idCliente left join telefono t on t.clave = ct.claveTelefono) r order by r.nombre");
+		return json_encode($result, JSON_UNESCAPED_UNICODE);
+		//return $result;
 	}
 	
 	public function typeahead() {

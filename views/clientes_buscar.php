@@ -1,5 +1,6 @@
 <? require_once 'phincludes/util.php' ?>
-<?$tiposTelefono = $intranet->tiposTelefono() ?>
+<?$tiposTelefono = $intranet->tiposTelefono(); ?>
+<?$clientes = $intranet->typeaheadAll(); ?>
 <? $edicion = false; ?>
 <style>
 .dropdown-menu>li>a {
@@ -15,7 +16,7 @@ a.dropdown-item {
 			<div class="form-group col-md-4">
 				<label  class="normal" for="nombre" >&nbsp;</label><br />
 				<div class="input-group">
-					<input <?=htmlValConf('', "Nombre, Nombre Fiscal, RFC ó email del cliente...", false)?>value="" class="form-control" id="nombre_cliente" name="nombre_cliente">
+					<input autocomplete="off" data-provider="typeahead" <?=htmlValConf('', "Nombre, Nombre Fiscal, RFC ó email del cliente...", false)?>value="" class="form-control" id="nombre_cliente" name="nombre_cliente">
 					<span class="input-group-btn">
 						<button class="btn btn-primary" onclick="findOrders();"><i class="glyphicon glyphicon-search"></i></button>
 					</span>
@@ -36,23 +37,11 @@ $(document).ready( function() {
 });
 var _txt;
 var ibc = $("#nombre_cliente").typeahead({
-    source: function (cadena, process) {
-        var result = null;
-        _txt = cadena;
-        $.ajax({
-            url: "phrapi/search/cliente",
-            data: {query: cadena},
-            type: "post",
-            dataType: "json",
-            async: false,
-            success: function(data) {
-                result = data;
-            } 
-         });
-        return process(result);
-    },
-    minLength: 6,
-    autoSelect: false,
+    source: <?=$clientes?>,
+    minLength: 3,
+    autoSelect: true,
+	items: 15,
+	selectOnBlur: false,
     afterSelect: function(item) {
         	if(item.id == -1) {
             	$("#div_cliente").show();

@@ -6,6 +6,8 @@
 <?$edicion = $result['id'] > 0 ? true : false ?>
 <?$datosCliente = $edicion ? $result['datosCliente'] : null ?>
 <?$datos = $edicion ? $result['datos'] : null ?>
+<?//$clientes = $intranet->typeaheadAll(); ?>
+<?$clientes = $result['clientes']; ?>
 <style>
 <!--
 .btn {
@@ -37,7 +39,7 @@ a.dropdown-item {
 		<div class="row">
 	    	<div class="form-group col-md-8">
 	      		<label for="nombre_cliente">Buscar un Cliente</label>
-	      		<input <?=htmlValConf('', "Nombre, Nombre Fiscal, RFC ó Número telefónico del cliente...", false)?>value="" class="form-control" id="nombre_cliente" name="nombre_cliente">
+	      		<input autocomplete="off" data-provider="typeahead" <?=htmlValConf('', "Nombre, Nombre Fiscal, RFC ó Número telefónico del cliente...", false)?>value="" class="form-control" id="nombre_cliente" name="nombre_cliente">
 	    	</div>
 	  	</div>
 	</div>
@@ -180,23 +182,52 @@ a.dropdown-item {
 		</form>
 	</div>
 <script type="text/javascript">
+
+var charMap = {
+    "á": "a", "à": "a",
+	"é": "e", "è": "e",
+	"í": "i", "ì": "i",
+	"ó": "o", "ò": "o",
+	"ú": "u", "ù": "u"
+};
+
+var normalize = function (input) {
+ $.each(charMap, function (unnormalizedChar, normalizedChar) {
+    var regex = new RegExp(unnormalizedChar, 'gi');
+    input = input.replace(regex, normalizedChar);
+ });
+ return input;
+}
+
 var $ibc = $("#nombre_cliente").typeahead({
-    source: function (cadena, process) {
-        var result = null;
-        $.ajax({
-            url: "phrapi/search/cliente",
-            data: {query: cadena},
-            type: "post",
-            dataType: "json",
-            async: false,
-            success: function(data) {
-                result = data;
-            } 
-         });
-        return process(result);
-    },
-    minLength: 4,
-    autoSelect: false,
+	/*highlighter: function(item){
+		var string_norm = item.normalize('NFD').replace(/[\u0300-\u036f]/g, "");
+		string_norm = "<div>" + string_norm + "</div>";
+		var myRegex = "" + this.query + "";
+		console.log(myRegex);
+		var re = new RegExp(myRegex, "gi");
+		//string_norm = string_norm.replaceAll(this.query, "<span style='font-weight:600;'>" + this.query + "</span>");
+		string_norm = string_norm.replaceAll(this.query, "XXX" + this.query + "XXX");
+		return string_norm;
+    },*/
+    source: <?=$clientes?>,
+    minLength: 3,
+    autoSelect: true,
+	items: 15,
+	selectOnBlur: false,
+	changeInputOnSelect: true,
+	changeInputOnMove: true,
+	matcher: function(item) {
+		var normalizedQuery = normalize(this.query);
+		var normalizedNombre = normalize(item.nombre);
+		//console.log(normalizedNombre);
+		//if(this.query.length && ~normalizedNombre.toLowerCase().indexOf(normalizedQuery.toLowerCase()))
+		//{
+			//console.log(normalizedNombre + " - " + normalizedQuery);
+		//}
+		if(this.query.length) return ~normalizedNombre.toLowerCase().indexOf(normalizedQuery.toLowerCase());
+	},
+	
     afterSelect: function(item) {
         	if(item.id == -1) {
             	$("#div_cliente").show();
