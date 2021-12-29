@@ -140,14 +140,21 @@ class Pcsoluciones {
 			
 			//FECHA
 			//Etiqueta
-			$pdf->SetFont('Arial','',12);
+			/*$pdf->SetFont('Arial','',12);
 			$pdf->SetXY( 175, 21 );
 			$pdf->Cell(35, 3, "Fecha", 0, null, "C" );
 			//$pdf->Rect(170, 29, 35, 5, 'B');
 			//Dato
 			$pdf->SetXY( 175, 25 );
 			$pdf->SetFont('Arial','',11);
-			$pdf->Cell(35, 5, $filaDatos->fecha, 0, null, "C" );
+			$pdf->Cell(35, 5, $filaDatos->fecha, 1, null, "C" );*/
+
+			$pdf->SetFont('Arial','',11);
+			$pdf->SetXY( 175, 21 );
+			$pdf->MultiCell(35, 5, "Fecha\n\r" .  $filaDatos->fecha, 1, 'C');
+			
+
+
 			
 			//CODIGO DE BARRAS
 			//include 'barcodegenerator.php';
@@ -158,7 +165,7 @@ class Pcsoluciones {
 			//CUADRO DE INFO, SE PONE AQUI PARA QUE QUEDE POR ENCIMA DEL CODIGO DE BARRAS
 			//$pdf->Rect(81, 10, 85, 30, 'B');
 			$pdf->SetFillColor(255);
-			$pdf->RoundedRect(87, 10, 85, 30, 2, '1234', 'DF');
+			$pdf->RoundedRect(87, 10, 85, 30, 0);
 			//INFO
 			//$pdf->Rect(81, 10, 85, 30, 'B');
 			$pdf->SetXY( 87, 13 );
@@ -166,13 +173,16 @@ class Pcsoluciones {
 			
 			//NUMERO DE ORDEN
 			//Etiqueta
-			$pdf->SetFont('Arial','',12);
+			/*$pdf->SetFont('Arial','',12);
 			$pdf->SetXY( 175, 10 );
-			$pdf->Cell(35, 3, "N�mero de orden", 0, null, "C" );
+			$pdf->Cell(35, 3, utf8_decode("Número de orden"), 0, null, "C" );
 			//Dato
 			$pdf->SetXY( 175, 14 );
 			$pdf->SetFont('Arial','',11);
-			$pdf->Cell(35, 5, $this->fixFolSize($folio), 1, null, "C" );
+			$pdf->Cell(35, 5, $this->fixFolSize($folio), 1, null, "C" );*/
+
+			$pdf->SetXY( 175, 10 );
+			$pdf->MultiCell(35, 5, utf8_decode("Número de orden") . "\n\r" .  $this->fixFolSize($folio), 1, 'C');
 			
 			//Para calcular los espacios entre las sig lineas
 			$_yposs = 45;
@@ -188,20 +198,20 @@ class Pcsoluciones {
 			$_yposs += $_yoffset;
 			//Dato
 			$pdf->SetXY( 8, $_yposs - 3);
-			$pdf->Cell(200, 5, "Telefono: " . $filaDatos->telefono, '0', null, "L" );
+			$pdf->Cell(200, 5, utf8_decode("Teléfono: " . $filaDatos->telefono), '0', null, "L" );
 			
 			//TELEFONO
 			$_yposs += $_yoffset;
 			//Dato
 			$pdf->SetXY( 8, $_yposs - 3);
-			$pdf->Cell(200, 5, "Direcci�n: " . ucwords( $filaDatos->domicilio != '' ? $filaDatos->domicilio : ' -  -  -  -  -  -  -  -  -  - ' ), '0', null, "L" );
+			$pdf->Cell(200, 5, utf8_decode("Dirección: ") . ucwords( $filaDatos->domicilio != '' ? $filaDatos->domicilio : ' -  -  -  -  -  -  -  -  -  - ' ), '0', null, "L" );
 			
 			//DETALLE-ORDEN 1
 			$pdf->SetXY( 8, 58 );
 			$pdf->SetFont('Arial','', 12);
-			$pdf->Cell(200, 5, "Descripci�n del equipo y/o servicio:", '0', null, "L" );
+			$pdf->Cell(200, 5, utf8_decode("Descripción del equipo y/o servicio:"), '0', null, "L" );
 			//$pdf->Rect(7, 63, 202, 52, 'B');
-			$pdf->RoundedRect(7, 63, 202, 52, 2, '1234', 'DF');
+			$pdf->RoundedRect(7, 63, 202, 52, 0);
 			$pdf->SetXY( 8, 66 );
 			$pdf->SetFont('Arial','', 11);
 			$pdf->MultiCell(200, 5, utf8_decode($filaDatos->descripcion), 0);
@@ -210,7 +220,7 @@ class Pcsoluciones {
 			$pdf->SetFont('Arial','', 9);
 			//$pdf->Rect(7, 115, 202, 20, 'B');
 			$pdf->SetXY( 8, 116 );
-			$pdf->MultiCell(200, 3, "Despu�s de 15 dias de recibido el equipo se cobrar� almacenaje(por d�a excedido). Despu�s de 90 dias NO nos har�mos responsables por el equipo. Para hacer v�lida la entrega, garant�a o cualquier aclaraci�n, es INDISPENSABLE presentar este comprobante.", 0, 'C');
+			$pdf->MultiCell(200, 3, utf8_decode("Después de 15 dias de recibido el equipo se cobrará almacenaje(por día excedido). Después de 90 dias NO nos harémos responsables por el equipo. Para hacer válida la entrega, garantía o cualquier aclaración, es INDISPENSABLE presentar este comprobante."), 0, 'C');
 			$pdf->SetXY( 80, 130 );
 			$pdf->SetFont('Arial','', 10);
 			$pdf->Cell(60, 5, "Firma de conformidad cliente", 'T', null, "C" );
