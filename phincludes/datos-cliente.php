@@ -98,6 +98,11 @@ table>tbody>tr>td>div {
 					<td colspan=""><div style="text-transform:lowercase;" id="emailcdiv"></div>
 					</td>
 				</tr>
+				<tr>
+					<td><label for="regimen">Régimen</label></td>
+					<td colspan=""><div style="" id="regimendiv"></div>
+					</td>
+				</tr>
 			</table>
 		</div>
 	</div>
@@ -206,6 +211,13 @@ table>tbody>tr>td>div {
       			<div class="help-block with-errors"></div>
     		</div>
   		</div>
+		  <div class="row">
+    		<div class="form-group col-md-3">
+      			<label for="regimen">R&eacute;gimen</label>
+      			<input <?=htmlValConf("regimen", '', false, "L")?> value="<?=$edicion ? $datosCliente->regimen : ''?>" class="form-control" id="regimen" name="regimen">
+      			<div class="help-block with-errors"></div>
+    		</div>
+		</div>
 	</div>
 </div>
 <div id="cliente-alert" class="alert alert-dismissible col-md-6" role="alert">
@@ -223,6 +235,7 @@ function guardarCliente() {
 	var datos = JSON.stringify({
 		numcli: 	$('#numcli').val(),
         rfc: 		$('#rfc').val(),
+		regimen: 	$('#regimen').val(),
         nombre: 	$('#nombrec').val(),
         nombre_fiscal:	$('#nombref').val(),
         apellido1: 	$('#apellido1c').val(),

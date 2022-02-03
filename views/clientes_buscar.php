@@ -82,8 +82,10 @@ function cargarCliente(numcli) {
 		var clase = '';
 		if (response.code == 200) {
 			$('#numcli').val(response.id);
-			$("#rfc").val(response.rfc );
+			$("#rfc").val(response.rfc);
 			$("#rfcdiv").html(response.rfc );
+			$("#regimen").val(response.regimen);
+			$("#regimendiv").html(response.regimen);
 			$("#nombrec").val( utf8_decode (response.nombre));
 			$("#nombrediv").html( utf8_decode (response.nombre));
 			if(response.nombre_fiscal) {

@@ -833,6 +833,7 @@ class Pcsoluciones {
 						":a1" => $data->apellido1,
 						":a2" => $data->apellido2,
 						":rfc" => $data->rfc,
+						":reg" => $data->regimen,
 						":em" => $data->email);
 		$valoresDomicilio = array(
 						":ca" => $data->calle,
@@ -852,7 +853,7 @@ class Pcsoluciones {
 			//Actualizamos los datos del cliente
 			$valoresCliente[':id'] = $data->numcli;
 			$this->db->query(
-				"update cliente set nombre = :no, nombre_fiscal = :nf, apellido1 = :a1, apellido2 = :a2, rfc = :rfc, email = :em WHERE id = :id",
+				"update cliente set nombre = :no, nombre_fiscal = :nf, apellido1 = :a1, apellido2 = :a2, rfc = :rfc, regimen = :reg, email = :em WHERE id = :id",
 				$valoresCliente);
 			//Actualizamos el domicilio del cliente
 			$claveDomicilio = (int)$this->db->queryOne(
@@ -881,7 +882,7 @@ class Pcsoluciones {
 		} else {
 		
 			$this->db->query(
-				"insert into cliente set nombre = :no, nombre_fiscal = :nf, apellido1 = :a1, apellido2 = :a2, rfc = :rfc, email = :em",
+				"insert into cliente set nombre = :no, nombre_fiscal = :nf, apellido1 = :a1, apellido2 = :a2, rfc = :rfc, regimen = :reg, email = :em",
 				$valoresCliente);
 			$idCliente = $this->db->getLastID();
 			$this->db->query(
@@ -1681,7 +1682,7 @@ class Pcsoluciones {
 	
 	public function buscarCliente($id, $RFC=false) {
 		$datos = $this->db->queryRow(
-		"select 200 as code, c.nombre, c.nombre_fiscal, c.apellido1, c.apellido2, c.email, c.rfc, c.id,
+		"select 200 as code, c.nombre, c.nombre_fiscal, c.apellido1, c.apellido2, c.email, c.rfc, c.regimen, c.id,
 		d.calle, d.numext, d.numint, d.cruzacon, d.ycon, d.colonia, d.estado, d.cp, d.ciudad,
 	    t.numero, t.tipo, t.numero2, t.tipo2
 		from cliente c, telefono t, domicilio d, cliente_domicilio cd, cliente_telefono ct
