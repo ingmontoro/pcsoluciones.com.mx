@@ -100,7 +100,7 @@ table>tbody>tr>td>div {
 				</tr>
 				<tr>
 					<td><label for="regimen">Régimen</label></td>
-					<td colspan=""><div style="" id="regimendiv"></div>
+					<td colspan=""><div id="regimendiv"></div>
 					</td>
 				</tr>
 			</table>
@@ -168,22 +168,27 @@ table>tbody>tr>td>div {
     		</div>
     	</div>
     	<div class="row">
-    		<div class="form-group col-md-3">
+    		<div class="form-group col-md-2">
       			<label for="rfc">RFC</label>
       			<input <?=htmlValConf("RFC", '', false, "L", null, 10)?> value="<?=$edicion ? $datosCliente->rfc : ''?>" class="form-control" id="rfc" name="rfc">
       			<div class="help-block with-errors"></div>
     		</div>
+			<div class="form-group col-md-3">
+				<label for="regimen">R&eacute;gimen Fiscal</label>
+				<input <?=htmlValConf("regimen", '', false, "L")?> value="<?=$edicion ? $datosCliente->regimen : ''?>" class="form-control" id="regimen" name="regimen">
+				<div class="help-block with-errors"></div>
+			</div>
     		<div class="form-group col-md-3">
       			<label for="called">Calle</label>
       			<input <?=htmlValConf("Calle", '', false, "L", null, 3)?> value="<?=$edicion ? $datosCliente->calle : ''?>" class="form-control" id="called" name="called">
       			<div class="help-block with-errors"></div>
     		</div>
-    		<div class="form-group col-md-3">
+    		<div class="form-group col-md-2">
       			<label for="numextd">N&uacute;mero exterior</label>
       			<input <?=htmlValConf("Numero exterior", '', false, "L")?>value="<?=$edicion ? $datosCliente->numext : ''?>" class="form-control" id="numextd" name="numextd">
       			<div class="help-block with-errors"></div>
     		</div>
-    		<div class="form-group col-md-3">
+    		<div class="form-group col-md-2">
       			<label for="numintd">N&uacute;mero interior</label>
       			<input <?=htmlValConf("Numero interior", '', false, "L")?> value="<?=$edicion ? $datosCliente->numint : ''?>" class="form-control" id="numintd" name="numintd">
       			<div class="help-block with-errors"></div>
@@ -211,12 +216,8 @@ table>tbody>tr>td>div {
       			<div class="help-block with-errors"></div>
     		</div>
   		</div>
-		  <div class="row">
-    		<div class="form-group col-md-3">
-      			<label for="regimen">R&eacute;gimen</label>
-      			<input <?=htmlValConf("regimen", '', false, "L")?> value="<?=$edicion ? $datosCliente->regimen : ''?>" class="form-control" id="regimen" name="regimen">
-      			<div class="help-block with-errors"></div>
-    		</div>
+		<div class="row">
+			
 		</div>
 	</div>
 </div>
