@@ -454,7 +454,8 @@ $("#boton_abrir_pdf").click(function(e) {
 	//generarPDFOrden();
 	e.preventDefault();  //stop the browser from following
 	//window.location.href = 'phpscripts/pdf/generar-orden.php?folnot=' + $("#numord").val();
-	window.location.href = "phrapi/ordenpdf?folio=" + $("#numord").val();
+	//window.location.href = "phrapi/ordenpdf?folio=" + $("#numord").val();
+	window.open("phrapi/ordenpdf?folio=" + $("#numord").val(), '_blank');
 	//var objeto_window_referencia;
 	//var configuracion_ventana = "menubar=1,location=1,resizable=1,scrollbars=1,status=1,height=500,width=800";
 	//objeto_window_referencia = window.open("phrapi/ordenpdf?folio=" + $("#numord").val(), '_blank', configuracion_ventana);

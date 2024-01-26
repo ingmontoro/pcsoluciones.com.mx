@@ -42,7 +42,7 @@ th {
 				<?else: ?>
 				<?foreach($logs as $log):?>
 				<tr class="filaLog filaLog<?=($log->activo == 0 ? "Eli" : ($log->idAsignado == $login || $log->idAsignado == -1 ? ($log->idEstatus == '1' ? "AsignadoNT" : "AsignadoT") : '')) ?>">
-					<td class="celdaDescripcion" id="<?=$log->id; ?>" style="font-size: 12px; padding: 10px;"><?php echo utf8_decode($log->log); ?></td>
+					<td class="celdaDescripcion" id="<?=$log->id; ?>" style="font-size: 12px; padding: 10px;"><?php echo $log->log; ?></td>
 					<td class="" style="width:145px;">
 						<div class="acciones">
 							<button title="guardar cambios" type="button" class="btn btn-default guardar" style="cursor: pointer; display: none;">

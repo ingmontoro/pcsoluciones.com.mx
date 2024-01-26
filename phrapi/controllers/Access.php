@@ -133,7 +133,9 @@ class Access {
 		foreach ($usuarios as $usuario) {
 			$usuario->estilo = $usuario->imagen == '' ? '' : "background-image:url('assets/images/" . $usuario->imagen . "'); background-size:" . $usuario->tamano . "; background-position:" . $usuario->posicion . ";";
 			$usuario->clase = "profile " . $usuario->profile;
-			if ($usuario->id != 10 && $usuario->id != 3 && !$this->esHoraLaboral()) {
+
+			//if ($usuario->id != 10 && $usuario->id != 3 && !$this->esHoraLaboral()) {
+			if ($usuario->id != 1 && $usuario->id != 10 && $usuario->id != 3 && !$this->esHoraLaboral()) {
 				$usuario->estilo = "";
 				$usuario->clase = "profilef " . $usuario->profile;
 				$usuario->alias = "ZzZzZz...";

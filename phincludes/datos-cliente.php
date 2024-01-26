@@ -168,7 +168,7 @@ table>tbody>tr>td>div {
     		</div>
     	</div>
     	<div class="row">
-    		<div class="form-group col-md-2">
+			<div class="form-group col-md-2">
       			<label for="rfc">RFC</label>
       			<input <?=htmlValConf("RFC", '', false, "L", null, 10)?> value="<?=$edicion ? $datosCliente->rfc : ''?>" class="form-control" id="rfc" name="rfc">
       			<div class="help-block with-errors"></div>
@@ -183,7 +183,7 @@ table>tbody>tr>td>div {
       			<input <?=htmlValConf("Calle", '', false, "L", null, 3)?> value="<?=$edicion ? $datosCliente->calle : ''?>" class="form-control" id="called" name="called">
       			<div class="help-block with-errors"></div>
     		</div>
-    		<div class="form-group col-md-2">
+			<div class="form-group col-md-2">
       			<label for="numextd">N&uacute;mero exterior</label>
       			<input <?=htmlValConf("Numero exterior", '', false, "L")?>value="<?=$edicion ? $datosCliente->numext : ''?>" class="form-control" id="numextd" name="numextd">
       			<div class="help-block with-errors"></div>
@@ -216,9 +216,7 @@ table>tbody>tr>td>div {
       			<div class="help-block with-errors"></div>
     		</div>
   		</div>
-		<div class="row">
-			
-		</div>
+		<div class="row"></div>
 	</div>
 </div>
 <div id="cliente-alert" class="alert alert-dismissible col-md-6" role="alert">

@@ -155,22 +155,32 @@ class Pcsoluciones {
 			
 
 
-			
+
 			//CODIGO DE BARRAS
 			//include 'barcodegenerator.php';
 			$pdf->SetXY( 155, 32 );
 			//$pdf->Image("imgs/tempbarcodes/ximgbr$barnumber.gif", 170, 35 );
 			//$pdf->Image("imgs/tempbarcodes/ximgbr$barnumber.gif", 164, 31);
-			
+
 			//CUADRO DE INFO, SE PONE AQUI PARA QUE QUEDE POR ENCIMA DEL CODIGO DE BARRAS
 			//$pdf->Rect(81, 10, 85, 30, 'B');
 			$pdf->SetFillColor(255);
 			$pdf->RoundedRect(87, 10, 85, 30, 0);
 			//INFO
 			//$pdf->Rect(81, 10, 85, 30, 'B');
-			$pdf->SetXY( 87, 13 );
-			$pdf->MultiCell(85, 4, utf8_decode("ERNESTO MONTORO RODRIGUEZ\nR.F.C MORE820615PI1\nCURP MORE820615HJCNDR00\nMEDRAN0 #2799\nCOL. RESIDENCIAL DEL PARQUE C.P. 44810\nTEL (33)33319708 CEL (044)3318421540"), 0, 'C');
-			
+			$pdf->SetXY(87, 13);
+			//$pdf->MultiCell(85, 4, utf8_decode("ERNESTO MONTORO RODRIGUEZ\nR.F.C MORE820615PI1\nCURP MORE820615HJCNDR00\nMEDRAN0 #2799\nCOL. RESIDENCIAL DEL PARQUE C.P. 44810\n    3333319708        /      3314862595"), 0, 'C');
+			$pdf->MultiCell(85, 4, utf8_decode("ERNESTO MONTORO RODRIGUEZ\nR.F.C MORE820615PI1\nCURP MORE820615HJCNDR00\nMEDRAN0 #2799\nCOL. RESIDENCIAL DEL PARQUE C.P. 44810"), 0, 'C');
+
+			$pdf->SetXY(101, 34);
+			$pdf->Cell(24, 5, "3333319708", '0', null, "L");
+			$pdf->Image('../assets/images/phone-icon.png', 96, 33, 5);
+
+			$pdf->SetXY(139, 34);
+			$pdf->Cell(24, 5, "3314862595", '0', null, "L");
+			$pdf->Image('../assets/images/cell-phone-icon.png', 127, 33, 5);
+			$pdf->Image('../assets/images/whatsapp-logo.png', 134, 33, 5);
+
 			//NUMERO DE ORDEN
 			//Etiqueta
 			/*$pdf->SetFont('Arial','',12);
@@ -226,7 +236,8 @@ class Pcsoluciones {
 			$pdf->Cell(60, 5, "Firma de conformidad cliente", 'T', null, "C" );
 			
 			//$pdf->Output( $_destino_back . $_destino . $_nombre, 'D');
-			$pdf->Output( $_nombre, 'D');
+			//$pdf->Output( $_nombre, 'D');
+			$pdf->Output( $_nombre, 'I');
 			exit;
 		} else {
 			echo "La orden de servicio no tiene los datos completos o no existe.";

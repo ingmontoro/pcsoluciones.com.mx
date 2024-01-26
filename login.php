@@ -109,9 +109,9 @@
 		<div style="background-color: black; color: white; font-size: 15px; display: table-row-group;">
 		<?$pruebas = strpos($GLOBALS['config']['db'][0]['name'], 'develop')?>
 		<?$produccion = $pruebas === false ? true : false?>
-		<?$dbmd5 = $produccion ? "dd96c1aee6c32bca651d83247649d290" : "9f42dd65006d44338c8cd37d968b56d5"?>
+		<?$dbmd5 = $produccion ? "012f5090ee59b5f3652ce7349a351e15" : "9f42dd65006d44338c8cd37d968b56d5"?>
 		<?$dbstat = $dbmd5 == md5($GLOBALS['config']['db'][0]['name'])?>
-		Modo: <span class="db-name"><?=$produccion ? "PRODUCCION" : "PRUEBAS" ?></span> - Conexión BD: <?=$dbmd5?><span class="db-status db-<?=$dbstat ? 'ok' : 'error'?>"> <?=$dbstat ? "OK" : "E R R O R"?></span>
+		Modo: <span class="db-ok"><?=$produccion ? "PRODUCCION" : "PRUEBAS" ?></span> - Conexi&oacute;n BD: <?=$dbmd5?><span class="db-status db-<?=$dbstat ? 'ok' : 'error'?>"> <?=$dbstat ? "OK" : "E R R O R"?></span>
 		</div>
 		<div id="configuracion" title="Configuraci&oacute;n inicial">
 			<form id="userConfig" method="post">
